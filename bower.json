@@ -1,7 +1,7 @@
 {
-  "name": "harpy",
+  "name": "harpi",
   "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js",
-  "homepage": "http://meanjs.org/",
+  "homepage": "",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "~3",
