@@ -1,0 +1,22 @@
+<section ng-controller="ProjectsController" ng-init="findOne()">
+  <div class="page-header">
+    <h1 ng-bind="project.title"></h1>
+  </div>
+  <div class="pull-right" ng-show="authentication.user._id == project.user._id">
+    <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="project.created | date:'mediumDate'"></span>
+      by
+      <span ng-bind="project.user.displayName"></span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="project.content"></p>
+</section>
