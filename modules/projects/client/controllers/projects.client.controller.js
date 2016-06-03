@@ -18,7 +18,7 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
       // Create new Project object
       var project = new Projects({
         title: this.title,
-        content: this.content
+        description: this.description
       });
 
       // Redirect after save
@@ -27,7 +27,7 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
 
         // Clear form fields
         $scope.title = '';
-        $scope.content = '';
+        $scope.description = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
