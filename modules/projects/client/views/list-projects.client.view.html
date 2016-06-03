@@ -5,13 +5,13 @@
   <div class="list-group">
     <a ng-repeat="project in projects" ui-sref="projects.view({projectId: project._id})" class="list-group-item">
       <small class="list-group-item-text">
-        Posted on
+        Created on
         <span ng-bind="project.created | date:'mediumDate'"></span>
         by
         <span ng-bind="project.user.displayName"></span>
       </small>
       <h4 class="list-group-item-heading" ng-bind="project.title"></h4>
-      <p class="list-group-item-text" ng-bind="project.content"></p>
+      <p class="list-group-item-text" ng-bind="project.description"></p>
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="projects.$resolved && !projects.length">

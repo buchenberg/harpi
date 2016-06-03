@@ -2,8 +2,8 @@
 
 module.exports = {
   app: {
-    title: 'MEAN.JS',
-    description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
+    title: 'Harpi',
+    description: 'An HTTP Archive pipeline.',
     keywords: 'mongodb, express, angularjs, node.js, mongoose, passport',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
@@ -34,6 +34,12 @@ module.exports = {
       dest: './modules/users/client/img/profile/uploads/', // Profile upload destination path
       limits: {
         fileSize: 1*1024*1024 // Max file size in bytes (1 MB)
+      }
+    } ,
+    projectUpload: {
+      dest: './modules/projects/client/uploads/', // Profile upload destination path
+      limits: {
+        fileSize: 4*1024*1024 // Max file size in bytes (1 MB)
       }
     }
   }

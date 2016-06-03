@@ -6,3 +6,10 @@ module.exports.profileUploadFileFilter = function (req, file, cb) {
   }
   cb(null, true);
 };
+
+module.exports.harUploadFileFilter = function (req, file, cb) {
+  if (file.mimetype !== 'application/json') {
+    return cb(new Error('Only JSON files are allowed!'), false);
+  }
+  cb(null, true);
+};

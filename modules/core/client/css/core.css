@@ -38,3 +38,7 @@ a:hover .header-profile-image {
 .img-responsive {
     margin: 0 auto;
 }
+
+.jumbotron {
+    background-color: #FFF;
+}

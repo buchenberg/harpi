@@ -12,11 +12,11 @@
   </div>
   <small>
     <em class="text-muted">
-      Posted on
+      Created on
       <span ng-bind="project.created | date:'mediumDate'"></span>
       by
       <span ng-bind="project.user.displayName"></span>
     </em>
   </small>
-  <p class="lead" ng-bind="project.content"></p>
+  <p class="lead" ng-bind="project.description"></p>
 </section>

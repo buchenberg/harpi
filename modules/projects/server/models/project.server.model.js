@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 /**
  * Module dependencies.
@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
 /**
  * Project Schema
  */
+
 var ProjectSchema = new Schema({
   created: {
     type: Date,
@@ -20,15 +21,20 @@ var ProjectSchema = new Schema({
     trim: true,
     required: 'Title cannot be blank'
   },
-  content: {
+  description: {
     type: String,
     default: '',
     trim: true
+  },
+  har: {
+    type: Schema.ObjectId,
+    ref: 'Har'
   },
   user: {
     type: Schema.ObjectId,
     ref: 'User'
   }
 });
+
 
 mongoose.model('Project', ProjectSchema);

@@ -5,6 +5,8 @@
  */
 var path = require('path'),
   mongoose = require('mongoose'),
+  multer = require('multer'),
+  config = require(path.resolve('./config/config')),
   Project = mongoose.model('Project'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -27,6 +29,51 @@ exports.create = function (req, res) {
 };
 
 /**
+ * Update profile picture
+ */
+exports.uploadHars = function (req, res) {
+  var user = req.user;
+  var message = null;
+  var upload = multer(config.uploads.projectUpload).single('newHar');
+  var harUploadFileFilter = require(path.resolve('./config/lib/multer')).harUploadFileFilter;
+  
+  // Filtering to upload only JSON
+  upload.fileFilter = harUploadFileFilter;
+
+  if (user) {
+    upload(req, res, function (uploadError) {
+      if(uploadError) {
+        return res.status(400).send({
+          message: 'Error occurred while uploading har'
+        });
+      } else {
+        user.profileImageURL = config.uploads.profileUpload.dest + req.file.filename;
+
+        user.save(function (saveError) {
+          if (saveError) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(saveError)
+            });
+          } else {
+            req.login(user, function (err) {
+              if (err) {
+                res.status(400).send(err);
+              } else {
+                res.json(user);
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    res.status(400).send({
+      message: 'User is not signed in'
+    });
+  }
+};
+
+/**
  * Show the current project
  */
 exports.read = function (req, res) {
@@ -40,7 +87,7 @@ exports.update = function (req, res) {
   var project = req.project;
 
   project.title = req.body.title;
-  project.content = req.body.content;
+  project.description = req.body.description;
 
   project.save(function (err) {
     if (err) {
