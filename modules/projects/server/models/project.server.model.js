@@ -26,10 +26,10 @@ var ProjectSchema = new Schema({
     default: '',
     trim: true
   },
-  har: {
+  hars: [ {
     type: Schema.ObjectId,
     ref: 'Har'
-  },
+  }],
   user: {
     type: Schema.ObjectId,
     ref: 'User'
