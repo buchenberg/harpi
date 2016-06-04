@@ -29,9 +29,9 @@ exports.create = function (req, res) {
 };
 
 /**
- * Update profile picture
+ * Update har
  */
-exports.uploadHars = function (req, res) {
+exports.uploadHar = function (req, res) {
   var user = req.user;
   var message = null;
   var upload = multer(config.uploads.projectUpload).single('newHar');
@@ -47,23 +47,7 @@ exports.uploadHars = function (req, res) {
           message: 'Error occurred while uploading har'
         });
       } else {
-        user.profileImageURL = config.uploads.profileUpload.dest + req.file.filename;
-
-        user.save(function (saveError) {
-          if (saveError) {
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(saveError)
-            });
-          } else {
-            req.login(user, function (err) {
-              if (err) {
-                res.status(400).send(err);
-              } else {
-                res.json(user);
-              }
-            });
-          }
-        });
+        //do some shit with the har
       }
     });
   } else {

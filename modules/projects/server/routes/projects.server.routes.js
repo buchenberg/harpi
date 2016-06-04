@@ -18,6 +18,8 @@ module.exports = function (app) {
     .put(projects.update)
     .delete(projects.delete);
 
+  app.route('/api/projects/har').post(projects.uploadHar);
+
   // Finish by binding the project middleware
   app.param('projectId', projects.projectByID);
 };

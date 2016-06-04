@@ -24,5 +24,23 @@
         </div>
       </fieldset>
     </form>
+    <br>
+    <form name="harForm" class="form-horizontal" novalidate>
+      <fieldset>
+        <div class="text-center form-group" ng-hide="uploader.queue.length">
+          <span class="btn btn-default btn-file">
+              Select Har <input type="file" nv-file-select uploader="uploader">
+          </span>
+        </div>
+        <div class="text-center form-group" ng-show="uploader.queue.length">
+          <p><span ng-bind="filename"></span></p>
+          <button class="btn btn-primary" ng-click="uploadHarFile();">Upload</button>
+          <button class="btn btn-default" ng-click="cancelUpload();">Cancel</button>
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="upload_error"></strong>
+        </div>
+      </fieldset>
+    </form>
   </div>
 </section>

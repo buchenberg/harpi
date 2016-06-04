@@ -1,6 +1,14 @@
 <section ng-controller="ProjectsController" ng-init="findOne()">
   <div class="page-header">
     <h1 ng-bind="project.title"></h1>
+    <small>
+    <em class="text-muted">
+    Created on
+    <span ng-bind="project.created | date:'mediumDate'"></span>
+    by
+    <span ng-bind="project.user.displayName"></span>
+    </em>
+    </small>
   </div>
   <div class="pull-right" ng-show="authentication.user._id == project.user._id">
     <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
@@ -10,13 +18,11 @@
       <i class="glyphicon glyphicon-trash"></i>
     </a>
   </div>
-  <small>
-    <em class="text-muted">
-      Created on
-      <span ng-bind="project.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="project.user.displayName"></span>
-    </em>
-  </small>
   <p class="lead" ng-bind="project.description"></p>
+  <h2>Har</h2>
+  <div class="pull-right" ng-show="authentication.user._id == project.user._id">
+    <a class="btn btn-primary">
+      <i class="glyphicon glyphicon-upload"></i>
+    </a>
+  </div>
 </section>
