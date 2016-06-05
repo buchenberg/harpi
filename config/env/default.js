@@ -37,9 +37,9 @@ module.exports = {
       }
     } ,
     projectUpload: {
-      dest: './modules/projects/client/uploads/', // Profile upload destination path
+      dest: './modules/projects/client/uploads/', // Projects upload destination path
       limits: {
-        fileSize: 4*1024*1024 // Max file size in bytes (1 MB)
+        fileSize: 4*1024*1024 // Max file size in bytes (4 MB)
       }
     }
   }

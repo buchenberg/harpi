@@ -81,82 +81,70 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
       });
     };
 
-    /*----------------------------------------------------HAR file upload------------------------------------------------------*/
+    //Uploads
+    // var dropZone = document.getElementById('har-drop-zone');
+
+    // dropZone.ondragover = function() {
+    //     this.className = 'upload-drop-zone drop';
+    //     return false;
+    // }
+
+    // dropZone.ondragleave = function() {
+    //     this.className = 'upload-drop-zone';
+    //     return false;
+    // }
+
+    $scope.authentication = Authentication;
+
+
+    // Find existing Project
+    $scope.findOne = function() {
+      $scope.project = Projects.get({
+        projectId: $stateParams.projectId
+      });
+    };
+
 
     // Create file uploader instance
     var uploader = $scope.uploader = new FileUploader({
-      url: '/api/projects/har',
-      //queueLimit: 1,
-      //alias: 'newHar'
+      url: '/api/projects/' + $stateParams.projectId + '/upload'
     });
-
-    // filters
-    uploader.filters.push({
-      name: 'customFilter',
-      fn: function(item /*{File|FileLikeObject}*/ , options) {
-        return this.queue.length < 10;
-      }
-    });
-
-    // Set file uploader js filter
-    // $scope.uploader.filters.push({
-    //   name: 'harFilter',
-    //   fn: function(item, options) {
-    //     var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-    //     return '|json|js|'.indexOf(type) !== -1;
-    //   }
-    // });
 
 
     // CALLBACKS
 
     uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/ , filter, options) {
-      console.info('onWhenAddingFileFailed', item, filter, options);
+      console.info('onWhenAddingFileFailed ', item, filter, options);
     };
+
+
     uploader.onAfterAddingFile = function(fileItem) {
-      console.info('onAfterAddingFile', JSON.stringify(fileItem.file.name));
       $scope.filename = JSON.stringify(fileItem.file.name).replace(/\"/g, "");
     };
 
-    // Called after the user selects a new har file
-    // $scope.uploader.onAfterAddingFile = function(fileItem) {
-    //   console.info('onAfterAddingFile', fileItem);
-    //   if ($window.FileReader) {
-    //     var fileReader = new FileReader();
-    //     fileReader.readAsDataURL(fileItem._file);
-
-    //     fileReader.onload = function(fileReaderEvent) {
-    //       $timeout(function() {
-    //         $scope.harURL = fileReaderEvent.target.result;
-    //       }, 0);
-    //     };
-    //   }
-    // };
 
     // Called after the user has successfully uploaded a new har
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
       // Show success message
       $scope.success = true;
-
       // Populate user object
-      $scope.user = Authentication.user = response;
-
+      //$scope.user = Authentication.user = response;
       // Clear upload buttons
       $scope.cancelUpload();
     };
 
     // Called after the user has failed to uploaded a new har
     uploader.onErrorItem = function(fileItem, response, status, headers) {
-      console.info('onErrorItem', response);
+      console.info('onErrorItem ', response);
       // Clear upload buttons
       $scope.cancelUpload();
-
       // Show error message
       $scope.upload_error = response.message;
     };
 
     // add har
     $scope.uploadHarFile = function() {
+      var file = $scope.myFile;
       // Clear messages
       $scope.success = $scope.error = null;
       // Start upload
@@ -166,7 +154,10 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     // Cancel the upload process
     $scope.cancelUpload = function() {
       $scope.uploader.clearQueue();
-      //$scope.harURL = $scope.user.hars;
+      //dropZone.className = 'upload-drop-zone';
     };
+
+
+
   }
 ]);

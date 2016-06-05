@@ -247,8 +247,10 @@ module.exports = function (grunt) {
     var done = this.async();
 
     grunt.file.mkdir(path.normalize(__dirname + '/modules/users/client/img/profile/uploads'));
-
+    grunt.file.mkdir(path.normalize(__dirname + '/modules/projects/client/uploads'));
+    
     done();
+    
   });
 
   // Connect to the MongoDB instance and load the models

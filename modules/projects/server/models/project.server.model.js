@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
+
 /**
  * Project Schema
  */
@@ -26,7 +27,7 @@ var ProjectSchema = new Schema({
     default: '',
     trim: true
   },
-  hars: [ {
+  hars: [{
     type: Schema.ObjectId,
     ref: 'Har'
   }],
@@ -35,6 +36,5 @@ var ProjectSchema = new Schema({
     ref: 'User'
   }
 });
-
 
 mongoose.model('Project', ProjectSchema);

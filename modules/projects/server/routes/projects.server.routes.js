@@ -18,7 +18,9 @@ module.exports = function (app) {
     .put(projects.update)
     .delete(projects.delete);
 
-  app.route('/api/projects/har').post(projects.uploadHar);
+  //Upload HAR files
+  app.route('/api/projects/:projectId/upload').all(projectsPolicy.isAllowed)
+    .post(projects.uploadHar);
 
   // Finish by binding the project middleware
   app.param('projectId', projects.projectByID);

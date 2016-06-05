@@ -1,0 +1,22 @@
+<section>
+  <div class="page-header">
+    <h1>Hars</h1>
+  </div>
+  <div class="list-group">
+    <a data-ng-repeat="har in vm.hars"
+       data-ui-sref="hars.view({ harId: har._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span data-ng-bind="har.created | date:'mediumDate'"></span>
+        by
+        <span data-ng-if="har.user" data-ng-bind="har.user.displayName"></span>
+        <span data-ng-if="!har.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" data-ng-bind="har.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="vm.hars.$resolved && !vm.hars.length">
+    No Hars yet, why don't you <a data-ui-sref="hars.create">create one</a>?
+  </div>
+</section>
