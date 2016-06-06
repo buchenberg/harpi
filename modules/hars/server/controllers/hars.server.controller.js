@@ -38,7 +38,7 @@ exports.read = function(req, res) {
   var input = 'C:\\Users\\Greg\\Documents\\GitHub\\harpi\\modules\\projects\\client\\uploads\\projects\\57510af1f695f2801a399cf7\\har\\5092278d1379842f9462ba1e0a9fb847';
   var exec = require('child_process').exec,
     child;
-  child = exec('java -jar '+jolt+' transform '+spec+' '+input,
+  child = exec('java -jar ' + jolt + ' transform ' + spec + ' ' + input,
     function(error, stdout, stderr) {
       console.log('stdout: ' + stdout);
       console.log('stderr: ' + stderr);
