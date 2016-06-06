@@ -1,28 +1,17 @@
 <section>
   <div class="page-header">
-    <h1 data-ng-bind="vm.har.name"></h1>
+    <h1 data-ng-bind="vm.har._id"></h1>
   </div>
   <div class="pull-right"
-       data-ng-show="vm.har.isCurrentUserOwner">
+    data-ng-show="vm.har.isCurrentUserOwner">
     <a class="btn btn-primary"
-       data-ui-sref="hars.edit({ harId: vm.har._id })">
+      data-ui-sref="hars.edit({ harId: vm.har._id })">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
     <a class="btn btn-primary" data-ng-click="vm.remove()">
       <i class="glyphicon glyphicon-trash"></i>
     </a>
   </div>
-
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span data-ng-bind="vm.har.created | date:'mediumDate'"></span>
-      by
-      <span data-ng-if="vm.har.user"
-            data-ng-bind="vm.har.user.displayName"></span>
-      <span data-ng-if="!vm.har.user">Deleted User</span>
-    </em>
-  </small>
-  <p class="lead" data-ng-bind="vm.har._id"></p>
-  <div class="well" data-ng-bind="harText"></div>
+  <p class="lead"></p>
+  <pre id="custom-spacing">{{ vm.har| json:2 }}</pre>
 </section>

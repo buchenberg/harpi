@@ -26,29 +26,3 @@
     </form>
   </div>
 </section>
-<section ng-controller="UploadsController" ng-init="findOne()">
-  <h2>Add Har to project</h2>
-  <div class="col-md-12">
-    <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate>
-      <fieldset>
-        <div class="text-center form-group" ng-hide="uploader.queue.length">
-          <h3>Drag and drop a har file below.</h3>
-          <div class="upload-drop-zone" nv-file-drop uploader="uploader" id="har-drop-zone">Drop file here</div>
-          <h3>Or browse for a har file.</h3>
-          <label class="btn btn-default btn-file">
-            Browse <input type="file" nv-file-select uploader="uploader" style="display: none;">
-          </label>
-        </div>
-        <div class="text-center form-group" ng-show="uploader.queue.length">
-          <h3>{{ uploader.queue.length }} file queued for upload.</h3>
-          <p><span ng-bind="filename"></span></p>
-          <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
-          <button class="btn btn-default" ng-click="cancelUpload()">Cancel</button>
-        </div>
-        <div ng-show="error" class="text-danger">
-          <strong ng-bind="upload_error"></strong>
-        </div>
-      </fieldset>
-    </form>
-  </div>
-</section>

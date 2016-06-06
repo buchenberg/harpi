@@ -1,14 +1,14 @@
 <section ng-controller="ProjectsController" ng-init="findOne()">
   <div class="page-header">
     <h1 ng-bind="project.title"></h1>
-    <small>
+    <!-- <small>
     <em class="text-muted">
     Created on
     <span ng-bind="project.created | date:'mediumDate'"></span>
     by
     <span ng-bind="project.user.displayName"></span>
     </em>
-    </small>
+    </small> -->
   </div>
   <div class="pull-right" ng-show="authentication.user._id == project.user._id">
     <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
@@ -19,32 +19,40 @@
     </a>
   </div>
   <p class="lead" ng-bind="project.description"></p>
-  <h2>Hars</h2>
-  <ul>
-    <li ng-repeat="har in project.hars"><a href="/hars/{{har}}"><span ng-bind="har"></span></a></li>
-  </ul>
-  <div class="col-md-12" ng-show="authentication.user._id == project.user._id">
-    <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate>
-      <fieldset>
-        <div class="text-center form-group" ng-hide="uploader.queue.length">
-          <h3>Drag and drop a har file below.</h3>
-          <div class="upload-drop-zone" nv-file-drop uploader="uploader" id="har-drop-zone">Drop file here</div>
-          <h3>Or browse for a har file.</h3>
-          <label class="btn btn-primary btn-file">
-            <i class="glyphicon glyphicon-search"></i> Browse <input type="file" nv-file-select uploader="uploader" style="display: none;"></label>
-          </label>
-        </div>
-        <div class="text-center form-group" ng-show="uploader.queue.length">
-          <h3>{{ uploader.queue.length }} file queued for upload.</h3>
-          <p><span ng-bind="filename"></span></p>
-          <button class="btn btn-primary" ng-click="uploadHarFile()"><i class="glyphicon glyphicon-upload"></i> Upload</button>
-          <button class="btn btn-danger" ng-click="cancelUpload()"><i class="glyphicon glyphicon-remove-circle
-          "></i> Cancel</button>
-        </div>
-        <div ng-show="error" class="text-danger">
-          <strong ng-bind="upload_error"></strong>
-        </div>
-      </fieldset>
-    </form>
+  <!-- panel for hars -->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Hars</h3>
+      
+    </div>
+    <div class="panel-body">
+      <ul>
+        <li ng-repeat="har in project.hars"><a href="/hars/{{har}}"><span ng-bind="har"></span></a></li>
+      </ul>
+      <div class="col-md-12" ng-show="authentication.user._id == project.user._id">
+        <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate>
+          <fieldset>
+            <div class="text-center form-group" ng-hide="uploader.queue.length">
+              <h3>Drag and drop a har file below.</h3>
+              <div class="upload-drop-zone" nv-file-drop uploader="uploader" id="har-drop-zone">Drop file here</div>
+              <h3>Or browse for a har file.</h3>
+              <label class="btn btn-primary btn-file">
+                <i class="glyphicon glyphicon-search"></i> Browse <input type="file" nv-file-select uploader="uploader" style="display: none;"></label>
+              </label>
+            </div>
+            <div class="text-center form-group" ng-show="uploader.queue.length">
+              <h3>{{ uploader.queue.length }} file queued for upload.</h3>
+              <p><span ng-bind="filename"></span></p>
+              <button class="btn btn-primary" ng-click="uploadHarFile()"><i class="glyphicon glyphicon-upload"></i> Upload</button>
+              <button class="btn btn-danger" ng-click="cancelUpload()"><i class="glyphicon glyphicon-remove-circle
+              "></i> Cancel</button>
+            </div>
+            <div ng-show="error" class="text-danger">
+              <strong ng-bind="upload_error"></strong>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
