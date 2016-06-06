@@ -108,7 +108,6 @@ exports.delete = function(req, res) {
  * List of Hars
  */
 exports.list = function(req, res) {
-  cool();
   Har.find().sort('-created').populate('user', 'displayName').exec(function(err, hars) {
     if (err) {
       return res.status(400).send({

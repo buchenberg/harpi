@@ -1,0 +1,30 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.spec._id ? 'Edit Spec' : 'New Spec'}}</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="vm.form.specForm" class="form-horizontal" ng-submit="vm.save(vm.form.specForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Name</label>
+          <input name="name" type="text" ng-model="vm.spec.name" id="name" class="form-control" placeholder="Name" required>
+          <div ng-messages="vm.form.specForm.name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Spec name is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="spec">Spec</label>
+          <textarea name="spec" ng-model="vm.spec.spec" id="spec" class="form-control" cols="30" rows="10" placeholder="Spec"></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.spec._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
