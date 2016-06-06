@@ -27,18 +27,26 @@ exports.create = function(req, res) {
   });
 };
 
-/**
- * Show the current Har
- */
-exports.read = function(req, res) {
-  // convert mongoose document to JSON
-  var har = req.har ? req.har.toJSON() : {};
+//the ugly ass functionality is right here.
+//jolt is the tranformer
+//TODO manage dependency better
+//spec is the transform specification
+//TODO CRUD to MongoDB as part of custom pipeline
+//inputUrl is the endpoint address of the resource to be pransformed
+//TODO prolly shouldn't hard-code this
+
+function cool() {
   var jolt = 'C:\\Users\\Greg\\APPS\\jolt-cli-0.0.22-SNAPSHOT-shaded.jar';
   var spec = 'C:\\Users\\Greg\\Documents\\GitHub\\harpi\\modules\\hars\\server\\controllers\\spec.json';
-  var input = 'C:\\Users\\Greg\\Documents\\GitHub\\harpi\\modules\\projects\\client\\uploads\\projects\\57510af1f695f2801a399cf7\\har\\5092278d1379842f9462ba1e0a9fb847';
+  var inputUrl = 'http://localhost:3000/api/hars/5754a9642c94b6dc1b2669b9';
   var exec = require('child_process').exec,
     child;
-  child = exec('java -jar ' + jolt + ' transform ' + spec + ' ' + input,
+  child = exec('curl -s ' +
+    inputUrl +
+    ' | java -jar ' +
+    jolt +
+    ' transform ' +
+    spec,
     function(error, stdout, stderr) {
       console.log('stdout: ' + stdout);
       console.log('stderr: ' + stderr);
@@ -46,7 +54,13 @@ exports.read = function(req, res) {
         console.log('exec error: ' + error);
       }
     });
-
+}
+/**
+ * Show the current Har
+ */
+exports.read = function(req, res) {
+  // convert mongoose document to JSON
+  var har = req.har ? req.har.toJSON() : {};
   // Add a custom field to Har, for determining if the current User is the "owner".
   // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Har model.
   har.isCurrentUserOwner = req.user && har.user && har.user._id.toString() === req.user._id.toString() ? true : false;
@@ -94,6 +108,7 @@ exports.delete = function(req, res) {
  * List of Hars
  */
 exports.list = function(req, res) {
+  cool();
   Har.find().sort('-created').populate('user', 'displayName').exec(function(err, hars) {
     if (err) {
       return res.status(400).send({
