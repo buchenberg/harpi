@@ -7,11 +7,8 @@
        data-ui-sref="hars.view({ harId: har._id })"
        class="list-group-item">
       <small class="list-group-item-text">
-        Posted on
-        <span data-ng-bind="har.created | date:'mediumDate'"></span>
-        by
-        <span data-ng-if="har.user" data-ng-bind="har.user.displayName"></span>
-        <span data-ng-if="!har.user">Deleted User</span>
+        ID:
+        <span data-ng-bind="har._id"></span>
       </small>
       <h4 class="list-group-item-heading" data-ng-bind="har.name"></h4>
     </a>

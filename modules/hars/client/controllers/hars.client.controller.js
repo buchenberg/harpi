@@ -11,12 +11,16 @@
   function HarsController ($scope, $state, Authentication, har) {
     var vm = this;
 
+
+
     vm.authentication = Authentication;
     vm.har = har;
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+
+    $scope.harText = JSON.stringify(har, null, 2);
 
     // Remove existing Har
     function remove() {
