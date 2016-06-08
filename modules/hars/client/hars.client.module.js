@@ -1,5 +1,4 @@
-(function (app) {
+(function(app) {
   'use strict';
-
-  app.registerModule('hars');
+  app.registerModule('hars', ['ui.ace']);
 })(ApplicationConfiguration);

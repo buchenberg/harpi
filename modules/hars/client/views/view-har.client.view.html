@@ -13,5 +13,12 @@
     </a>
   </div>
   <p class="lead"></p>
-  <pre id="custom-spacing">{{ vm.har| json:2 }}</pre>
+  <div ui-ace="{
+  useWrapMode : true,
+  showGutter: true,
+  theme:'twilight',
+  mode: 'json',
+  onLoad: aceLoaded
+}"></div>
+  <!-- <pre id="custom-spacing">{{ vm.har| json:2 }}</pre> -->
 </section>

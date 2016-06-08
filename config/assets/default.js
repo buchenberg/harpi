@@ -5,8 +5,7 @@ module.exports = {
     lib: {
       css: [
         'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css',
-        'public/lib/ng-json-explorer/dist/angular-json-explorer.css'
+        'public/lib/bootstrap/dist/css/bootstrap-theme.css'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -18,7 +17,8 @@ module.exports = {
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
         'public/lib/angular-file-upload/angular-file-upload.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
-        'public/lib/ng-json-explorer/dist/angular-json-explorer.js'
+        'public/lib/ace-builds/src-min-noconflict/ace.js',
+        'public/lib/angular-ui-ace/ui-ace.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
@@ -45,7 +45,9 @@ module.exports = {
     gulpConfig: 'gulpfile.js',
     allJS: ['server.js', 'config/**/*.js', 'modules/*/server/**/*.js'],
     models: 'modules/*/server/models/**/*.js',
-    routes: ['modules/!(core)/server/routes/**/*.js', 'modules/core/server/routes/**/*.js'],
+    routes: ['modules/!(core)/server/routes/**/*.js',
+      'modules/core/server/routes/**/*.js'
+    ],
     sockets: 'modules/*/server/sockets/**/*.js',
     config: 'modules/*/server/config/*.js',
     policies: 'modules/*/server/policies/*.js',

@@ -63,3 +63,5 @@ a:hover .header-profile-image {
   color: #222;
   border-color: #222;
 }
+
+.ace_editor { height: 600px; }

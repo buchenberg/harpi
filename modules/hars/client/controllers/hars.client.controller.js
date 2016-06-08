@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   // Hars controller
@@ -6,9 +6,11 @@
     .module('hars')
     .controller('HarsController', HarsController);
 
-  HarsController.$inject = ['$scope', '$state', 'Authentication', 'harResolve'];
+  HarsController.$inject = ['$scope', '$state', 'Authentication',
+    'harResolve'
+  ];
 
-  function HarsController ($scope, $state, Authentication, har) {
+  function HarsController($scope, $state, Authentication, har) {
     var vm = this;
 
 
@@ -20,7 +22,16 @@
     vm.remove = remove;
     vm.save = save;
 
-    $scope.harText = JSON.stringify(har, null, 2);
+    //$scope.harText = JSON.stringify(har, null, 2);
+
+    $scope.aceLoaded = function(_editor) {
+      // Options
+      //_editor.setReadOnly(true);
+      _editor.setValue(JSON.stringify(har, null, 2));
+      //_editor.focus(); // To focus the ace editor
+      _editor.selection.moveTo(1, 1)
+
+    };
 
     // Remove existing Har
     function remove() {
