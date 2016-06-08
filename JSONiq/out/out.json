@@ -1,0 +1,39 @@
+{
+  "swagger" : "2.0", 
+  "info" : {
+    "version" : "1.0.0", 
+    "title" : "Swagger Test", 
+    "description" : "A test swagger-2.0 specification", 
+    "termsOfService" : "http://swagger.io/terms/", 
+    "contact" : {
+      "name" : "G. Buchenberger"
+    }, 
+    "license" : {
+      "name" : "MIT"
+    }
+  }, 
+  "host" : "petstore.swagger.io", 
+  "basePath" : "/api", 
+  "schemes" : [ "https" ], 
+  "consumes" : [ "application/json" ], 
+  "produces" : [ "application/json" ], 
+  "paths" : {
+    "/www.charter.net/email/" : {
+      "get" : {
+        "description" : "A description", 
+        "produces" : [ "application/json" ], 
+        "responses" : {
+          "200" : {
+            "description" : "A list of pets.", 
+            "schema" : {
+              "type" : "array", 
+              "items" : {
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
