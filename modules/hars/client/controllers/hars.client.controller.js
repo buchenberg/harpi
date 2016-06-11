@@ -33,7 +33,7 @@
       _editor.selection.moveTo(0, 0);
       _editor.onCopy = function() {
         alert('What are you going to do with that text?');
-      }
+      };
 
     };
 
