@@ -52,7 +52,7 @@ function cool() {
         response.on('data', function(chunk) {
             str += chunk;
         });
-        //the whole response has been recieved, so we just print it out here
+        //the whole response has been recieved, so we just print it out here. test
         response.on('end', function() {
             var query = JSON.stringify(JSON.parse(str).spec);
             var exec = require('child_process').exec,
