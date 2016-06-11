@@ -37,6 +37,7 @@ exports.create = function(req, res) {
 //TODO prolly shouldn't hard-code this
 
 function cool() {
+    //TODO add to config
     var zorba = '/home/greg/Bin/zorba/bin/zorba';
     //http request for specs
     //TODO this is fucked. We should be able to get this via internal calls to the spec ObjectId

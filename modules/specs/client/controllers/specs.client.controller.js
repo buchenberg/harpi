@@ -18,6 +18,19 @@
     vm.remove = remove;
     vm.save = save;
 
+    $scope.aceLoaded = function(_editor) {
+      // Options
+      //_editor.setReadOnly(true);
+      _editor.setValue(JSON.stringify(spec.spec, null, 2));
+      //_editor.$blockScrolling = Infinity;
+      _editor.focus(); // To focus the ace editor
+      _editor.selection.moveTo(0, 0);
+      _editor.onCopy = function() {
+        alert('What are you going to do with that text?');
+      };
+
+    };
+
     // Remove existing Spec
     function remove() {
       if (confirm('Are you sure you want to delete?')) {
