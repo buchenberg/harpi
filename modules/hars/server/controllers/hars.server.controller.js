@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+var ZorbaAPI = require('zorba-nodejs').ZorbaAPI;
 var path = require('path'),
     mongoose = require('mongoose'),
     http = require('http'),
@@ -37,6 +38,7 @@ exports.create = function(req, res) {
 //TODO prolly shouldn't hard-code this
 
 function cool() {
+
     //TODO add to config
     var zorba = '/home/greg/Bin/zorba/bin/zorba';
     //http request for specs
@@ -59,7 +61,7 @@ function cool() {
             var exec = require('child_process').exec,
                 child;
             child = exec(zorba +
-                " -q " +
+                " -f -q " +
                 query,
                 function(error, stdout, stderr) {
                     console.log('stdout: ' + stdout);
