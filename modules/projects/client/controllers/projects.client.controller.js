@@ -127,6 +127,7 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
       // Show success message
       $scope.success = true;
+      $scope.project = response;
       // Populate user object
       //$scope.user = Authentication.user = response;
       // Clear upload buttons

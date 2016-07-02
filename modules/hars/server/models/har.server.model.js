@@ -9,32 +9,24 @@ var mongoose = require('mongoose'),
 /**
  * Har Schema
  */
-// var HarSchema = new Schema({
-//   name: {
-//     type: String,
-//     default: '',
-//     required: 'Please fill Har name',
-//     trim: true
-//   },
-//   created: {
-//     type: Date,
-//     default: Date.now
-//   },
-//   user: {
-//     type: Schema.ObjectId,
-//     ref: 'User'
-//   }
-// });
-
-// mongoose.model('Har', HarSchema);
-
-/**
- * Har Schema
- */
-
 var HarSchema = new Schema({
-  log: {}
-    
+  name: {
+    type: String,
+    default: '',
+    required: 'Please fill Har name',
+    trim: true
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  log: {},
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 });
 
 mongoose.model('Har', HarSchema);
+
+

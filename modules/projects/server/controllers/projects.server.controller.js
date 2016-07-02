@@ -98,6 +98,7 @@ exports.uploadHar = function(req, res) {
     project = req.project,
     projectId = project._id,
     uploadDestination = './modules/projects/client/uploads/projects/' + projectId + '/har/';
+    console.log(req.file);
 
 
   var message = null;
@@ -115,7 +116,7 @@ exports.uploadHar = function(req, res) {
         console.log(err);
         return res.status(400).send({
           //STUB
-          message: 'error stub'
+          message: 'Something happened at the upload stage.'
         });
       } else {
         //STUB
@@ -124,14 +125,16 @@ exports.uploadHar = function(req, res) {
         //console.log('harJson: %s', harJson);
 
         var newHar = new Har(harJson);
+        newHar.name = req.file.filename;
         //project.user = req.user;
         //console.log('newHar: %s', newHar);
 
         newHar.save(function(err) {
           if (err) {
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(err)
-            });
+            console.log('Har error:' + err);
+            // return res.status(400).send({
+            //   message: errorHandler.getErrorMessage(err)
+            // });
           } else {
             console.log('Har saved.');
           }
@@ -141,34 +144,27 @@ exports.uploadHar = function(req, res) {
         project.hars.push(newHar._id);
         project.save(function(err) {
           if (err) {
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(err)
-            });
+            console.log('Error adding har to project.'+ err);
+            // return res.status(400).send({
+            //   message: errorHandler.getErrorMessage(err)
+            // });
           } else {
             console.log('Har added to project.');
           }
         });
         //console.log(JSON.stringify(project));
-        // Project.
-        //   .findOne({
-        //     _id: projectId
-        //   })
-        //   .populate('hars')
-        //   .exec(function(err, har) {
-        //     if (err) return handleError(err);
-        //     console.log('The creator is %s', story._creator.name);
-        //     // prints "The creator is Aaron"
-        //   });
+        Project.findOne({
+            _id: projectId
+          })
+          .populate('hars')
+          .exec(function(err, har) {
+            if (err) return handleError(err);
+          });
+         return res.json(project);
 
-
-        //console.log(JSON.stringify(json));
-        //project.har = json;
-        //console.log(JSON.stringify(json));
-
-
-        return res.status(200).send({
-          message: 'success stub'
-        });
+        // return res.status(200).send({
+        //   message: 'success stub'
+        // });
       }
     });
   } else {

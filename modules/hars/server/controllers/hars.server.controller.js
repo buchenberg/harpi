@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-var ZorbaAPI = require('zorba-nodejs').ZorbaAPI;
 var path = require('path'),
     mongoose = require('mongoose'),
     http = require('http'),
@@ -29,59 +28,10 @@ exports.create = function(req, res) {
     });
 };
 
-//the ugly ass functionality is right here.
-//zorba is the tranformer
-//TODO manage dependency better
-//query is the transform specification
-//TODO CRUD to MongoDB as part of custom pipeline
-//inputUrl is the endpoint address of the resource to be transformed
-//TODO prolly shouldn't hard-code this
-
-function cool() {
-
-    //TODO add to config
-    var zorba = '/home/greg/Bin/zorba/bin/zorba';
-    //http request for specs
-    //TODO this is fucked. We should be able to get this via internal calls to the spec ObjectId
-    //TODO this should use the current har as an external variable. Fuck yeah!!
-    var options = {
-        host: 'localhost',
-        port: '3000',
-        path: '/api/specs/575c7184b41cc0080a544e7e'
-    };
-    var callback = function(response) {
-        var str = '';
-        //another chunk of data has been recieved, so append it to `str`
-        response.on('data', function(chunk) {
-            str += chunk;
-        });
-        //the whole response has been recieved, so we just print it out here. test
-        response.on('end', function() {
-            var query = JSON.stringify(JSON.parse(str).spec);
-            var exec = require('child_process').exec,
-                child;
-            child = exec(zorba +
-                " -f -q " +
-                query,
-                function(error, stdout, stderr) {
-                    console.log('stdout: ' + stdout);
-                    console.log('stderr: ' + stderr);
-                    if (error !== null) {
-                        console.log('exec error: ' + error);
-                    }
-                });
-        });
-    }
-
-    http.request(options, callback).end();
-
-
-}
 /**
  * Show the current Har
  */
 exports.read = function(req, res) {
-    cool();
     // convert mongoose document to JSON
     var har = req.har ? req.har.toJSON() : {};
     // Add a custom field to Har, for determining if the current User is the "owner".

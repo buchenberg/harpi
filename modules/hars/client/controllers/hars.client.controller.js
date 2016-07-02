@@ -27,7 +27,7 @@
     $scope.aceLoaded = function(_editor) {
       // Options
       //_editor.setReadOnly(true);
-      _editor.setValue(JSON.stringify(har, null, 2));
+      _editor.setValue(JSON.stringify(har.log, null, 2));
       //_editor.$blockScrolling = Infinity;
       _editor.focus(); // To focus the ace editor
       _editor.selection.moveTo(0, 0);
