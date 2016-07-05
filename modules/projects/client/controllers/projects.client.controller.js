@@ -94,16 +94,6 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     //     return false;
     // }
 
-    $scope.authentication = Authentication;
-
-
-    // Find existing Project
-    $scope.findOne = function() {
-      $scope.project = Projects.get({
-        projectId: $stateParams.projectId
-      });
-    };
-
 
     // Create file uploader instance
     var uploader = $scope.uploader = new FileUploader({
@@ -127,9 +117,12 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
       // Show success message
       $scope.success = true;
-      $scope.project = response;
+      //$scope.project = response;
       // Populate user object
       //$scope.user = Authentication.user = response;
+      $scope.project = Projects.get({
+        projectId: $stateParams.projectId
+      });
       // Clear upload buttons
       $scope.cancelUpload();
     };
