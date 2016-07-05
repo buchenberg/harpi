@@ -81,19 +81,9 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
       });
     };
 
-    //Uploads
-    // var dropZone = document.getElementById('har-drop-zone');
-
-    // dropZone.ondragover = function() {
-    //     this.className = 'upload-drop-zone drop';
-    //     return false;
-    // }
-
-    // dropZone.ondragleave = function() {
-    //     this.className = 'upload-drop-zone';
-    //     return false;
-    // }
-
+    /*
+    UPLOAD HAR FILES
+    */
 
     // Create file uploader instance
     var uploader = $scope.uploader = new FileUploader({
@@ -117,12 +107,10 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
       // Show success message
       $scope.success = true;
-      //$scope.project = response;
+      // Populate project
+      $scope.project = response;
       // Populate user object
       //$scope.user = Authentication.user = response;
-      $scope.project = Projects.get({
-        projectId: $stateParams.projectId
-      });
       // Clear upload buttons
       $scope.cancelUpload();
     };
@@ -148,7 +136,6 @@ angular.module('projects').controller('ProjectsController', ['$scope', '$statePa
     // Cancel the upload process
     $scope.cancelUpload = function() {
       $scope.uploader.clearQueue();
-      //dropZone.className = 'upload-drop-zone';
     };
 
 

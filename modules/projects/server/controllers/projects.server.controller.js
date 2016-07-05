@@ -96,20 +96,22 @@ exports.list = function(req, res) {
 exports.uploadHar = function(req, res) {
   var user = req.user,
     project = req.project,
-    projectId = project._id,
-    uploadDestination = './modules/projects/client/uploads/projects/' + projectId + '/har/';
-    console.log(req.file);
+    projectId = project._id;
+    //uploadDestination = './modules/projects/client/uploads/projects/' + projectId + '/har/';
+    //console.log(req.file);
 
 
   var message = null;
-  var upload = multer({
-    dest: uploadDestination
-  }).single('file');
+  var storage = multer.memoryStorage();
+  var upload = multer({ storage: storage }).single('file');
+  // var upload = multer({
+  //   dest: uploadDestination
+  // }).single('file');
 
   if (user) {
 
-    console.log(user.displayName + ' is uploading a file to the ' + req.project.title + ' project.');
-    console.log("Uploading har to " + uploadDestination);
+    console.log(user.displayName + ' is uploading a har file to the ' + req.project.title + ' project.');
+    console.log("Uploading har to memory");
 
     upload(req, res, function(err) {
       if (err) {
@@ -120,14 +122,12 @@ exports.uploadHar = function(req, res) {
         });
       } else {
         //STUB
-        var fullUploadPath = uploadDestination + req.file.filename;
-        var harJson = JSON.parse(require('fs').readFileSync(fullUploadPath, 'utf8'));
+        console.log('File original name: %s', req.file.originalname);
+        var harJson = JSON.parse(req.file.buffer);
         //console.log('harJson: %s', harJson);
 
         var newHar = new Har(harJson);
-        newHar.name = req.file.filename;
-        //project.user = req.user;
-        //console.log('newHar: %s', newHar);
+        newHar.name = req.file.originalname;
 
         newHar.save(function(err) {
           if (err) {
