@@ -15,6 +15,7 @@ app/tests/coverage/
 .bower-*/
 .idea/
 coverage/
+mongo_data/*
 
 # MEAN.js app and assets
 # ======================
