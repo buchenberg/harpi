@@ -1,24 +1,33 @@
 <section>
   <div class="page-header">
-    <h1 data-ng-bind="vm.har._id"></h1>
+    <h1>
+    <span data-ng-bind="vm.har.name"></span>
+    <div class='btn-toolbar pull-right' ng-show="authentication.user._id == har.user._id">
+      <div class='btn-group'>
+        <a class="btn btn-primary" ui-sref="hars.edit({harId: har._id})">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </a>
+        <a class="btn btn-danger" ng-click="remove();">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+    </div>
+    </h1>
   </div>
   <div class="pull-right" data-ng-show="vm.har.isCurrentUserOwner">
     <a class="btn btn-primary" data-ui-sref=
     "hars.edit({ harId: vm.har._id })"></a> <a class="btn btn-primary"
-    data-ng-click="vm.remove()"></a></div>
-    <p class="lead"></p>
-    <!-- <div class="well" ui-ace="{ showGutter: true, theme:'monokai', mode: 'json', onLoad: aceLoaded }">
-  </div> -->
+  data-ng-click="vm.remove()"></a></div>
+  <p class="lead"></p>
   <div class="row">
     <div class="pull-right">
       <a class="btn btn-primary"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
     </div>
   </div>
   <div class="row">
-
-  <div class="well" ui-ace="{ showGutter: true,
-   theme:'monokai',
-    mode: 'json',
-  onLoad: aceLoaded }"></div>
+    <div class="well" ui-ace="{ showGutter: true,
+      theme:'monokai',
+      mode: 'json',
+    onLoad: aceLoaded }"></div>
   </div>
 </section>

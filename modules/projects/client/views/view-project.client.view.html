@@ -1,16 +1,20 @@
 <section ng-controller="ProjectsController" ng-init="findOne()">
   <div class="page-header">
-    <h1 ng-bind="project.title">
+    <h1>
+    <span>{{project.title}}</span>
+    <div class='btn-toolbar pull-right' ng-show="authentication.user._id == project.user._id">
+      <div class='btn-group'>
+        <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </a>
+        <a class="btn btn-danger" ng-click="remove();">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+    </div>
     </h1>
+    <p class="lead" ng-bind="project.description"></p>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == project.user._id">
-    <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
-    </a>
-    <a class="btn btn-primary" ng-click="remove();">
-    </a>
-  </div>
-  <p class="lead" ng-bind="project.description">
-  </p>
   <!-- panel for hars -->
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -19,8 +23,8 @@
     <div class="panel-body">
       <div class="list-group col-md-12">
         <a data-ng-repeat="har in project.hars" data-ui-sref="hars.view({ harId: har })"class="list-group-item">
-          <small class="list-group-item-text">ID: <span data-ng-bind="har"></span></small>
-          <h4 class="list-group-item-heading" data-ng-bind="har">
+          <small class="list-group-item-text">ID: <span data-ng-bind="har._id"></span></small>
+          <h4 class="list-group-item-heading" data-ng-bind="har.name">
           </h4>
         </a>
       </div>
@@ -32,18 +36,18 @@
               <div class="upload-drop-zone" nv-file-drop="" uploader="uploader"id="har-drop-zone">Drop file here</div>
               <h3>Or browse for a har file.</h3>
               <label class="btn btn-primary btn-file">Browse <input type="file"nv-file-select="" uploader="uploader" style="display: none;">
-              </label>
-            </div>
-            <div class="text-center form-group" ng-show="uploader.queue.length">
-              <h3>{{ uploader.queue.length }} file queued for upload.</h3>
-              <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
-              <button class="btn btn-danger"ng-click="cancelUpload()">Cancel</button>
-            </div>
-            <div ng-show="error" class="text-danger">
-            </div>
-          </fieldset>
-        </form>
-      </div>
+            </label>
+          </div>
+          <div class="text-center form-group" ng-show="uploader.queue.length">
+            <h3>{{ uploader.queue.length }} file queued for upload.</h3>
+            <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
+            <button class="btn btn-danger"ng-click="cancelUpload()">Cancel</button>
+          </div>
+          <div ng-show="error" class="text-danger">
+          </div>
+        </fieldset>
+      </form>
     </div>
   </div>
+</div>
 </section>
