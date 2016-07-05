@@ -1,32 +1,33 @@
-FROM node:0.12
+FROM node:4.3.2
+
+RUN useradd --user-group --create-home --shell /bin/false app &&\
+  npm install --global npm@3.7.5 &&\
+  npm install --global grunt-cli@1.2.0 &&\
+  npm install --global bower@1.7.9
 
 # Install gem sass for  grunt-contrib-sass
-RUN apt-get update -qq && apt-get install -y build-essential
-RUN apt-get install -y ruby
+RUN apt-get update -qq && apt-get install -y build-essential ruby
 RUN gem install sass
 
-WORKDIR /home/mean
-
-# Install Mean.JS Prerequisites
-RUN npm install -g grunt-cli
-RUN npm install -g bower
-
-# Install Mean.JS packages
-ADD package.json /home/mean/package.json
-RUN npm install
-
-# Manually trigger bower. Why doesnt this work via npm install?
-ADD .bowerrc /home/mean/.bowerrc
-ADD bower.json /home/mean/bower.json
-RUN bower install --config.interactive=false --allow-root
-
-# Make everything available for start
-ADD . /home/mean
-
+ENV HOME=/home/app
 # Set development environment as default
 ENV NODE_ENV development
+
+COPY package.json bower.json .bowerrc $HOME/harpi/
+RUN chown -R app:app $HOME/*
+
+USER app
+WORKDIR $HOME/harpi
+RUN npm install
+
+USER root
+COPY . $HOME/harpi
+RUN chown -R app:app $HOME/*
+USER app
+
 
 # Port 3000 for server
 # Port 35729 for livereload
 EXPOSE 3000 35729
-CMD ["grunt"]
+CMD ["grunt", "--force"]
+

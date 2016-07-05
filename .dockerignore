@@ -1,0 +1,4 @@
+.git
+.gitignore
+public/lib
+node_modules
