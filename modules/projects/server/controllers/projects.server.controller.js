@@ -96,23 +96,14 @@ exports.list = function(req, res) {
 exports.uploadHar = function(req, res) {
   var user = req.user,
     project = req.project,
-    projectId = project._id;
-    //uploadDestination = './modules/projects/client/uploads/projects/' + projectId + '/har/';
-    //console.log(req.file);
-
-
-  var message = null;
-  var storage = multer.memoryStorage();
-  var upload = multer({ storage: storage }).single('file');
-  // var upload = multer({
-  //   dest: uploadDestination
-  // }).single('file');
+    projectId = project._id,
+    message = null,
+    storage = multer.memoryStorage(),
+    upload = multer({ storage: storage }).single('file');
 
   if (user) {
-
     console.log(user.displayName + ' is uploading a har file to the ' + req.project.title + ' project.');
     console.log("Uploading har to memory");
-
     upload(req, res, function(err) {
       if (err) {
         console.log(err);
@@ -132,27 +123,26 @@ exports.uploadHar = function(req, res) {
         newHar.save(function(err) {
           if (err) {
             console.log('Har error:' + err);
-            // return res.status(400).send({
-            //   message: errorHandler.getErrorMessage(err)
-            // });
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
           } else {
             console.log('Har saved.');
           }
         });
         console.log('New har id: %s', JSON.stringify(newHar._id));
 
-        project.hars.push(newHar._id);
+        project.hars.push({'name': 'foo', 'har': newHar._id});
         project.save(function(err) {
           if (err) {
             console.log('Error adding har to project.'+ err);
-            // return res.status(400).send({
-            //   message: errorHandler.getErrorMessage(err)
-            // });
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
           } else {
             console.log('Har added to project.');
           }
         });
-        //console.log(JSON.stringify(project));
         Project.findOne({
             _id: projectId
           })
@@ -161,10 +151,6 @@ exports.uploadHar = function(req, res) {
             if (err) return handleError(err);
           });
          return res.json(project);
-
-        // return res.status(200).send({
-        //   message: 'success stub'
-        // });
       }
     });
   } else {
