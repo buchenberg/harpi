@@ -5,10 +5,10 @@
     <div class='btn-toolbar pull-right' ng-show="authentication.user._id == project.user._id">
       <div class='btn-group'>
         <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
-          <i class="glyphicon glyphicon-pencil"></i>
+          <i class="glyphicon glyphicon-pencil"></i> Edit
         </a>
         <a class="btn btn-danger" ng-click="remove();">
-          <i class="glyphicon glyphicon-trash"></i>
+          <i class="glyphicon glyphicon-trash"></i> Delete
         </a>
       </div>
     </div>
@@ -16,11 +16,8 @@
     <p class="lead" ng-bind="project.description"></p>
   </div>
   <!-- panel for hars -->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Hars</h3>
-    </div>
-    <div class="panel-body">
+
+      <h3>Har files</h3>
       <div class="list-group col-md-12">
         <a data-ng-repeat="har in project.hars" data-ui-sref="hars.view({ harId: har })" class="list-group-item">
           <!-- <h4 class="list-group-item-heading">{{har.name}}</h4> -->
@@ -34,8 +31,8 @@
             <div class="text-center form-group" ng-hide="uploader.queue.length">
               <h3>Drag and drop a har file below.</h3>
               <div class="upload-drop-zone" nv-file-drop="" uploader="uploader"id="har-drop-zone">Drop file here</div>
-              <h3>Or browse for a har file.</h3>
-              <label class="btn btn-primary btn-file">Browse <input type="file"nv-file-select="" uploader="uploader" style="display: none;">
+              <h3>Or browse.</h3>
+              <label class="btn btn-primary btn-file"><i class="glyphicon glyphicon-search"></i> Browse<input type="file"nv-file-select="" uploader="uploader" style="display: none;">
             </label>
           </div>
           <div class="text-center form-group" ng-show="uploader.queue.length">
@@ -48,6 +45,6 @@
         </fieldset>
       </form>
     </div>
-  </div>
-</div>
+
+
 </section>
