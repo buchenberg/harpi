@@ -1,4 +1,5 @@
 .git
 .gitignore
+data
 public/lib
 node_modules

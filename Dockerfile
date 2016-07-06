@@ -10,8 +10,6 @@ RUN apt-get update -qq && apt-get install -y build-essential ruby
 RUN gem install sass
 
 ENV HOME=/home/app
-# Set development environment as default
-ENV NODE_ENV development
 
 COPY package.json bower.json .bowerrc $HOME/harpi/
 RUN chown -R app:app $HOME/*
