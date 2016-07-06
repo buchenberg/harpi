@@ -1,6 +1,8 @@
+![a harpy](https://raw.githubusercontent.com/buchenberg/harpi/master/modules/core/client/img/brand/logo.png "Harpi")
+
 #Harpi
 
-Harpi is an HTTP Archive pipeline
+Harpi is an HTTP Archive pipeline. 
 
 
 ##TODO
