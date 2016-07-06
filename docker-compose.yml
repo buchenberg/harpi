@@ -15,9 +15,5 @@ db:
   ports: 
    - "27017:27017"
   volumes:
-<<<<<<< HEAD
-   - ./mongo_data:/data/db
-=======
     - ./data/db:/data/db
->>>>>>> 1c714d55a9f25696f7da35bc540cc75618935def
 
