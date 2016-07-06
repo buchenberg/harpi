@@ -102,12 +102,9 @@ exports.uploadHar = function(req, res) {
     upload = multer({ storage: storage }).single('file');
 
   if (user) {
-<<<<<<< HEAD
     console.log(user.displayName + ' is uploading a har file to the ' + req.project.title + ' project.');
     console.log("Uploading har to memory");
-=======
     //console.log(user.displayName + ' is adding a har file to the ' + req.project.title + ' project.');
->>>>>>> 1c714d55a9f25696f7da35bc540cc75618935def
     upload(req, res, function(err) {
       if (err) {
         console.log(err);
@@ -121,37 +118,20 @@ exports.uploadHar = function(req, res) {
         newHar.user = user;
         newHar.save(function(err) {
           if (err) {
-<<<<<<< HEAD
-            console.log('Har error:' + err);
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(err)
-=======
             console.error(errorHandler.getErrorMessage(err));
             return res.status(400).send({
               message: "An error has occured saving the har file."
->>>>>>> 1c714d55a9f25696f7da35bc540cc75618935def
             });
           } else {
             console.log('Har saved.');
           }
         });
-<<<<<<< HEAD
-        console.log('New har id: %s', JSON.stringify(newHar._id));
-
-        project.hars.push({'name': 'foo', 'har': newHar._id});
-        project.save(function(err) {
-          if (err) {
-            console.log('Error adding har to project.'+ err);
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(err)
-=======
         project.hars.push(newHar._id);
         project.save(function(err) {
           if (err) {
             console.log(errorHandler.getErrorMessage(err));
             return res.status(400).send({
-              message: "An error has occured saving the project." 
->>>>>>> 1c714d55a9f25696f7da35bc540cc75618935def
+              message: "An error has occured saving the project."
             });
           } else {
             console.log('Har added to project.');
