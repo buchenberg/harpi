@@ -96,75 +96,56 @@ exports.list = function(req, res) {
 exports.uploadHar = function(req, res) {
   var user = req.user,
     project = req.project,
-    projectId = project._id;
-    //uploadDestination = './modules/projects/client/uploads/projects/' + projectId + '/har/';
-    //console.log(req.file);
-
-
-  var message = null;
-  var storage = multer.memoryStorage();
-  var upload = multer({ storage: storage }).single('file');
-  // var upload = multer({
-  //   dest: uploadDestination
-  // }).single('file');
+    projectId = project._id,
+    message = null,
+    storage = multer.memoryStorage(),
+    upload = multer({ storage: storage }).single('file');
 
   if (user) {
-
-    console.log(user.displayName + ' is uploading a har file to the ' + req.project.title + ' project.');
-    console.log("Uploading har to memory");
-
+    //console.log(user.displayName + ' is adding a har file to the ' + req.project.title + ' project.');
     upload(req, res, function(err) {
       if (err) {
         console.log(err);
         return res.status(400).send({
-          //STUB
-          message: 'Something happened at the upload stage.'
+          message: "An error has occured"
         });
       } else {
-        //STUB
-        console.log('File original name: %s', req.file.originalname);
-        var harJson = JSON.parse(req.file.buffer);
-        //console.log('harJson: %s', harJson);
-
-        var newHar = new Har(harJson);
+        var harJson = JSON.parse(req.file.buffer),
+        newHar = new Har(harJson);
         newHar.name = req.file.originalname;
-
+        newHar.user = user;
         newHar.save(function(err) {
           if (err) {
-            console.log('Har error:' + err);
-            // return res.status(400).send({
-            //   message: errorHandler.getErrorMessage(err)
-            // });
+            console.error(errorHandler.getErrorMessage(err));
+            return res.status(400).send({
+              message: "An error has occured saving the har file."
+            });
           } else {
             console.log('Har saved.');
           }
         });
-        console.log('New har id: %s', JSON.stringify(newHar._id));
-
         project.hars.push(newHar._id);
         project.save(function(err) {
           if (err) {
-            console.log('Error adding har to project.'+ err);
-            // return res.status(400).send({
-            //   message: errorHandler.getErrorMessage(err)
-            // });
+            console.log(errorHandler.getErrorMessage(err));
+            return res.status(400).send({
+              message: "An error has occured saving the project." 
+            });
           } else {
             console.log('Har added to project.');
           }
         });
-        //console.log(JSON.stringify(project));
         Project.findOne({
             _id: projectId
           })
           .populate('hars')
           .exec(function(err, har) {
-            if (err) return handleError(err);
+            console.log(errorHandler.getErrorMessage(err));
+            return res.status(400).send({
+              message: "An error has occured locating the saved project." 
+            });
           });
          return res.json(project);
-
-        // return res.status(200).send({
-        //   message: 'success stub'
-        // });
       }
     });
   } else {
@@ -173,8 +154,6 @@ exports.uploadHar = function(req, res) {
     });
   }
 };
-
-
 
 /**
  * Project middleware
