@@ -15,36 +15,31 @@
     </h1>
     <p class="lead" ng-bind="project.description"></p>
   </div>
-  <!-- panel for hars -->
-
-      <h3>Har files</h3>
-      <div class="list-group col-md-12">
-        <a data-ng-repeat="har in project.hars" data-ui-sref="hars.view({ harId: har })" class="list-group-item">
-          <!-- <h4 class="list-group-item-heading">{{har.name}}</h4> -->
-          <span class="glyphicon glyphicon-file"></span>
-          <small class="list-group-item-text">ID: <span>{{har}}</span></small>
-        </a>
-      </div>
-      <div class="col-md-12" ng-show="authentication.user._id == project.user._id">
-        <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate="" id="harForm">
-          <fieldset>
-            <div class="text-center form-group" ng-hide="uploader.queue.length">
-              <h3>Drag and drop a har file below.</h3>
-              <div class="upload-drop-zone" nv-file-drop="" uploader="uploader"id="har-drop-zone">Drop file here</div>
-              <h3>Or browse.</h3>
-              <label class="btn btn-primary btn-file"><i class="glyphicon glyphicon-search"></i> Browse<input type="file"nv-file-select="" uploader="uploader" style="display: none;">
+  <!-- panel for har files -->
+  <h3>Har files</h3>
+  <div class="list-group col-md-12">
+    <a data-ng-repeat="har in project.hars" data-ui-sref="hars.view({ harId: har._id })" class="list-group-item">
+      <h4 class="list-item-heading"><span class="glyphicon glyphicon-file"></span> {{har.name}}</h4>
+    </a>
+  </div>
+  <div class="col-md-12" ng-show="authentication.user._id == project.user._id">
+    <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate="" id="harForm">
+      <fieldset>
+        <div class="text-center form-group" ng-hide="uploader.queue.length">
+          <h3>Drag and drop a har file below.</h3>
+          <div class="upload-drop-zone" nv-file-drop="" uploader="uploader" id="har-drop-zone">Drop file here</div>
+          <h3>Or browse.</h3>
+          <label class="btn btn-primary btn-file"><i class="glyphicon glyphicon-search"></i> Browse<input type="file" nv-file-select="" uploader="uploader" style="display: none;">
             </label>
-          </div>
-          <div class="text-center form-group" ng-show="uploader.queue.length">
-            <h3>{{ uploader.queue.length }} file queued for upload.</h3>
-            <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
-            <button class="btn btn-danger" ng-click="cancelUpload()">Cancel</button>
-          </div>
-          <div ng-show="error" class="text-danger">
-          </div>
-        </fieldset>
-      </form>
-    </div>
-
-
+        </div>
+        <div class="text-center form-group" ng-show="uploader.queue.length">
+          <h3>{{ uploader.queue.length }} file queued for upload.</h3>
+          <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
+          <button class="btn btn-danger" ng-click="cancelUpload()">Cancel</button>
+        </div>
+        <div ng-show="error" class="text-danger">
+        </div>
+      </fieldset>
+    </form>
+  </div>
 </section>
