@@ -108,13 +108,13 @@ exports.uploadHar = function (req, res) {
 
   if (user) {
     console.log(user.displayName + ' is uploading a har file to the ' + req.project.title + ' project.');
-    console.log("Uploading har to memory");
+    console.log('Uploading har to memory');
     //console.log(user.displayName + ' is adding a har file to the ' + req.project.title + ' project.');
     upload(req, res, function (err) {
       if (err) {
         console.log(err);
         return res.status(400).send({
-          message: "An error has occured"
+          message: 'An error has occured'
         });
       } else {
         var harJson = JSON.parse(req.file.buffer),
@@ -125,7 +125,7 @@ exports.uploadHar = function (req, res) {
           if (err) {
             console.error(errorHandler.getErrorMessage(err));
             return res.status(400).send({
-              message: "An error has occured saving the har file."
+              message: 'An error has occured saving the har file.'
             });
           } else {
             console.log('Har saved.');
@@ -136,7 +136,7 @@ exports.uploadHar = function (req, res) {
           if (err) {
             console.log(errorHandler.getErrorMessage(err));
             return res.status(400).send({
-              message: "An error has occured saving the project."
+              message: 'An error has occured saving the project.'
             });
           } else {
             console.log('Har added to project.');
