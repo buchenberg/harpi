@@ -5,10 +5,10 @@
     <div class='btn-toolbar pull-right' ng-show="authentication.user._id == project.user._id">
       <div class='btn-group'>
         <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
-          <i class="glyphicon glyphicon-pencil"></i> Edit
+          <i class="glyphicon glyphicon-pencil"></i>
         </a>
         <a class="btn btn-danger" ng-click="remove();">
-          <i class="glyphicon glyphicon-trash"></i> Delete
+          <i class="glyphicon glyphicon-trash"></i>
         </a>
       </div>
     </div>
@@ -38,7 +38,7 @@
           <div class="text-center form-group" ng-show="uploader.queue.length">
             <h3>{{ uploader.queue.length }} file queued for upload.</h3>
             <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
-            <button class="btn btn-danger"ng-click="cancelUpload()">Cancel</button>
+            <button class="btn btn-danger" ng-click="cancelUpload()">Cancel</button>
           </div>
           <div ng-show="error" class="text-danger">
           </div>

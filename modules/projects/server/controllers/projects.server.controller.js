@@ -137,16 +137,6 @@ exports.uploadHar = function(req, res) {
             console.log('Har added to project.');
           }
         });
-        Project.findOne({
-            _id: projectId
-          })
-          .populate('hars')
-          .exec(function(err, har) {
-            console.log(errorHandler.getErrorMessage(err));
-            return res.status(400).send({
-              message: "An error has occured locating the saved project." 
-            });
-          });
          return res.json(project);
       }
     });
