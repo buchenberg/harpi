@@ -93,6 +93,62 @@ exports.list = function (req, res) {
     });
 };
 
+exports.listHars = function (req, res) {
+
+  Project.aggregate([
+    {
+      $unwind: '$hars'
+    },
+    {
+      $lookup:
+      {
+        from: 'hars',
+        localField: 'hars',
+        foreignField: '_id',
+        as: 'har'
+      }
+    },
+    {
+      $group:
+      {
+        _id: null,
+        'hars': {
+          '$push': {
+            'log': '$har.log'
+          }
+        }
+      }
+    },
+    {
+      $project:
+      {
+        _id: 0,
+        hars : 1
+      }
+    }
+  ], function (err, result) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+    res.json(result);
+  });
+
+  // Project.find().populate({
+  //   path: 'hars',
+  //   model: 'Har'
+  // }).exec(function (err, projects) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       message: errorHandler.getErrorMessage(err)
+  //     });
+  //   } else {
+  //     res.json(projects);
+  //   }
+  // });
+};
+
 
 
 /**
@@ -164,17 +220,17 @@ exports.projectByID = function (req, res, next, id) {
   }
 
   Project.findById(id)
-  .populate('user', 'displayName')
-  .populate('hars', 'name')
-  .exec(function (err, project) {
-    if (err) {
-      return next(err);
-    } else if (!project) {
-      return res.status(404).send({
-        message: 'No project with that identifier has been found'
-      });
-    }
-    req.project = project;
-    next();
-  });
+    .populate('user', 'displayName')
+    .populate('hars', 'name')
+    .exec(function (err, project) {
+      if (err) {
+        return next(err);
+      } else if (!project) {
+        return res.status(404).send({
+          message: 'No project with that identifier has been found'
+        });
+      }
+      req.project = project;
+      next();
+    });
 };
