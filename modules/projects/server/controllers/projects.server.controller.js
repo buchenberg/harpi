@@ -109,21 +109,13 @@ exports.listHars = function (req, res) {
       }
     },
     {
-      $group:
-      {
-        _id: null,
-        'hars': {
-          '$push': {
-            'har': '$har'
-          }
-        }
-      }
+      $unwind: '$har'
     },
     {
-      $project:
-      {
-        _id: 0,
-        hars : '$hars.har'
+      $group: {
+        _id: '$har._id',
+        user: { $first: '$har.user' },
+        log: { $first: '$har.log' }
       }
     }
   ], function (err, result) {
@@ -132,21 +124,8 @@ exports.listHars = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     }
-    res.json(result);
+    res.jsonp(result);
   });
-
-  // Project.find().populate({
-  //   path: 'hars',
-  //   model: 'Har'
-  // }).exec(function (err, projects) {
-  //   if (err) {
-  //     return res.status(400).send({
-  //       message: errorHandler.getErrorMessage(err)
-  //     });
-  //   } else {
-  //     res.json(projects);
-  //   }
-  // });
 };
 
 
