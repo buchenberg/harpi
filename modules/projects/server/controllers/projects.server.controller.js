@@ -114,7 +114,7 @@ exports.listHars = function (req, res) {
         _id: null,
         'hars': {
           '$push': {
-            'log': '$har.log'
+            'har': '$har'
           }
         }
       }
@@ -123,7 +123,7 @@ exports.listHars = function (req, res) {
       $project:
       {
         _id: 0,
-        hars : 1
+        hars : '$hars.har'
       }
     }
   ], function (err, result) {
