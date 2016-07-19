@@ -21,6 +21,10 @@ var HarSchema = new Schema({
     default: Date.now
   },
   log: {},
+  spec: {
+    type: Schema.ObjectId,
+    ref: 'Spec'
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

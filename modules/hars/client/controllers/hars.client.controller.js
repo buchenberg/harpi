@@ -20,6 +20,7 @@
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
+    vm.swaggerfy = swaggerfy;
     vm.save = save;
 
     //$scope.harText = JSON.stringify(har, null, 2);
@@ -41,6 +42,15 @@
     function remove() {
       if (confirm('Are you sure you want to delete?')) {
         vm.har.$remove($state.go('hars.list'));
+      }
+    }
+
+    // Convert existing Har
+    function swaggerfy() {
+      if (confirm('Are you sure you want to swaggerfy?')) {
+        vm.har.$swaggerfy(        
+          $state.go('specs.list')
+        );
       }
     }
 
@@ -68,5 +78,6 @@
         vm.error = res.data.message;
       }
     }
+
   }
 })();

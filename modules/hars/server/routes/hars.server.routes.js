@@ -16,6 +16,7 @@ module.exports = function(app) {
     .get(hars.read)
     .put(hars.update)
     .delete(hars.delete);
+    //.post(hars.swaggerfy);
 
   // Finish by binding the Har middleware
   app.param('harId', hars.harByID);

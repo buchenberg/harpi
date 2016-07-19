@@ -14,6 +14,12 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      swaggerfy: {
+        method: 'POST',
+        params: {
+          swaggerfy: true
+        }
       }
     });
   }

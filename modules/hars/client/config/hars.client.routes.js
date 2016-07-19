@@ -36,6 +36,18 @@
           pageTitle : 'Hars Create'
         }
       })
+      .state('hars.swaggerfy', {
+        url: '/:harId',
+        templateUrl: 'modules/hars/client/views/view-har.client.view.html',
+        controller: 'HarsController',
+        controllerAs: 'vm',
+        resolve: {
+          harResolve: makeSwagger
+        },
+        data:{
+          pageTitle: 'swagger {{ articleResolve.name }}'
+        }
+      })
       .state('hars.edit', {
         url: '/:harId/edit',
         templateUrl: 'modules/hars/client/views/form-har.client.view.html',
@@ -76,4 +88,14 @@
   function newHar(HarsService) {
     return new HarsService();
   }
+
+  makeSwagger.$inject = ['$stateParams', 'SpecsService'];
+
+  function makeSwagger($stateParams, SpecsService) {
+    return SpecsService.create({
+      harId: $stateParams.harId
+    }).$promise;
+  }
+
+
 })();

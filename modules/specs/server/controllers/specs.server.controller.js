@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Spec = mongoose.model('Spec'),
+  h2s = require('har-to-swagger'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -25,6 +26,33 @@ exports.create = function(req, res) {
       res.jsonp(spec);
     }
   });
+};
+
+/**
+ * Create a Spec from har file
+ */
+exports.createFromHar = function(req, res) {
+  var spec = new Spec();
+  h2s.generateAsync(req.log, function(err, result) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      spec.user = req.user;
+
+      spec.save(function(err) {
+        if (err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        } else {
+          res.jsonp(spec);
+        }
+      });
+    }
+  });
+
 };
 
 /**
