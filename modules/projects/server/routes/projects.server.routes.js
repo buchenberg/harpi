@@ -24,7 +24,8 @@ module.exports = function (app) {
 
     //Upload HAR files
   app.route('/api/projects/:projectId/hars').all(projectsPolicy.isAllowed)
-    .get(projects.listHars);
+    .get(projects.listHars)
+    .post(projects.uploadHar);
 
   // Finish by binding the project middleware
   app.param('projectId', projects.projectByID);

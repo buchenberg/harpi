@@ -76,7 +76,6 @@ exports.delete = function (req, res) {
 /**
  * List of Projects
  */
-//  'user', 'displayName'
 exports.list = function (req, res) {
   Project.find().sort('-created')
     .populate({
@@ -93,6 +92,9 @@ exports.list = function (req, res) {
     });
 };
 
+/**
+ * List of Har files in Project
+ */
 exports.listHars = function (req, res) {
 
   Project.aggregate([
