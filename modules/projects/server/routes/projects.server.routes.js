@@ -22,7 +22,7 @@ module.exports = function (app) {
   app.route('/api/projects/:projectId/upload').all(projectsPolicy.isAllowed)
     .post(projects.uploadHar);
 
-    //Upload HAR files
+    //List HAR files in project. Also supports reportType param for aggregate queries.
   app.route('/api/projects/:projectId/hars').all(projectsPolicy.isAllowed)
     .get(projects.listHars)
     .post(projects.uploadHar);

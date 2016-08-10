@@ -11,4 +11,19 @@ angular.module('projects').factory('Projects', ['$resource',
       }
     });
   }
+]).factory('ProjectHars', ['$resource',
+  function ($resource) {
+    console.log('project har request');
+    return $resource('api/projects/:projectId/hars', {
+      projectId: '@_id'
+    }, {
+      urlReport: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          reportType: 'url'
+        }
+      }
+    });
+  }
 ]);

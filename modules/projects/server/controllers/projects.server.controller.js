@@ -94,6 +94,7 @@ exports.list = function (req, res) {
 
 /**
  * List of Har files in Project
+ * TODO modularize the aggregate reports to seperate functions
  */
 exports.listHars = function (req, res) {
   if (Object.keys(req.query).length === 0) {
