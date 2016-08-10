@@ -96,38 +96,118 @@ exports.list = function (req, res) {
  * List of Har files in Project
  */
 exports.listHars = function (req, res) {
-
-  Project.aggregate([
-    {
-      $unwind: '$hars'
-    },
-    {
-      $lookup:
+  if (Object.keys(req.query).length === 0) {
+    Project.aggregate([
       {
-        from: 'hars',
-        localField: 'hars',
-        foreignField: '_id',
-        as: 'har'
+        $unwind: '$hars'
+      },
+      {
+        $lookup:
+        {
+          from: 'hars',
+          localField: 'hars',
+          foreignField: '_id',
+          as: 'har'
+        }
+      },
+      {
+        $unwind: '$har'
+      },
+      {
+        $group: {
+          _id: '$har._id',
+          user: { $first: '$har.user' },
+          log: { $first: '$har.log' }
+        }
       }
-    },
-    {
-      $unwind: '$har'
-    },
-    {
-      $group: {
-        _id: '$har._id',
-        user: { $first: '$har.user' },
-        log: { $first: '$har.log' }
+    ], function (err, result) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
       }
+      res.json(result);
+    });
+  } else {
+    var reportType = req.query.reportType;
+    switch (req.query.reportType) {
+      case 'url':
+        Project.aggregate([
+          {
+            $unwind: '$hars'
+          },
+          {
+            $lookup:
+            {
+              from: 'hars',
+              localField: 'hars',
+              foreignField: '_id',
+              as: 'har'
+            }
+          },
+          {
+            $unwind: '$har'
+          },
+          {
+            $group: {
+              _id: '$har._id',
+              user: { $first: '$har.user' },
+              log: { $first: '$har.log' }
+            }
+          },
+          { $unwind: '$log.entries' },
+          {
+            $project: {
+              verb: '$log.entries.request.method',
+              path: '$log.entries.request.url'
+
+            }
+          },
+          {
+            $group: {
+              '_id': '$path',
+              'verb': { $first: '$verb' }
+            }
+          },
+          {
+            $sort: {
+              '_id': 1
+            }
+          },
+          {
+            $group: {
+              '_id': null,
+              'requests': {
+                '$push': {
+                  'path': '$_id',
+                  'verb': '$verb'
+                }
+              }
+            }
+          },
+          {
+            '$project': {
+              '_id': 0,
+              'requests.path': 1,
+              'requests.verb': 1
+            }
+          }
+        ], function (err, result) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          }
+          res.json(result);
+        });
+        break;
+      default:
+        res.json({ 'result': 'unrecognized report type' });
     }
-  ], function (err, result) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-    res.jsonp(result);
-  });
+  }
+
+
+
 };
 
 
