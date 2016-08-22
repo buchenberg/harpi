@@ -27,7 +27,7 @@ var SpecSchema = new Schema({
     default: '',
     trim: true
   },
-  spec: {},
+  swagger: {},
   user: {
     type: Schema.ObjectId,
     ref: 'User'

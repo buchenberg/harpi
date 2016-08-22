@@ -11,37 +11,26 @@ var path = require('path'),
   _ = require('lodash');
 
 /**
- * Create a Spec
+ * Create a Swagger definition from har input
+ * required:
+ * body.title
+ * body.log
  */
-exports.create = function(req, res) {
-  var spec = new Spec(req.body);
-  spec.user = req.user;
+exports.create = function (req, res) {
 
-  spec.save(function(err) {
+  h2s.generateAsync(JSON.stringify(req.body), function (err, result) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.jsonp(spec);
-    }
-  });
-};
-
-/**
- * Create a Spec from har file
- */
-exports.createFromHar = function(req, res) {
-  var spec = new Spec();
-  h2s.generateAsync(req.log, function(err, result) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
+      console.log('result: ' + JSON.stringify(result, null, 2));
+      var spec = new Spec();
       spec.user = req.user;
-
-      spec.save(function(err) {
+      spec.title = req.body.title;
+      spec.swagger = result.swagger;
+      console.log('spec: ' + JSON.stringify(spec, null, 2));
+      spec.save(function (err) {
         if (err) {
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
@@ -53,12 +42,13 @@ exports.createFromHar = function(req, res) {
     }
   });
 
+
 };
 
 /**
  * Show the current Spec
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   // convert mongoose document to JSON
   var spec = req.spec ? req.spec.toJSON() : {};
 
@@ -72,12 +62,12 @@ exports.read = function(req, res) {
 /**
  * Update a Spec
  */
-exports.update = function(req, res) {
-  var spec = req.spec ;
+exports.update = function (req, res) {
+  var spec = req.spec;
 
-  spec = _.extend(spec , req.body);
+  spec = _.extend(spec, req.body);
 
-  spec.save(function(err) {
+  spec.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -91,10 +81,10 @@ exports.update = function(req, res) {
 /**
  * Delete an Spec
  */
-exports.delete = function(req, res) {
-  var spec = req.spec ;
+exports.delete = function (req, res) {
+  var spec = req.spec;
 
-  spec.remove(function(err) {
+  spec.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -108,8 +98,8 @@ exports.delete = function(req, res) {
 /**
  * List of Specs
  */
-exports.list = function(req, res) { 
-  Spec.find().sort('-created').populate('user', 'displayName').exec(function(err, specs) {
+exports.list = function (req, res) {
+  Spec.find().sort('-created').populate('user', 'displayName').exec(function (err, specs) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -123,7 +113,7 @@ exports.list = function(req, res) {
 /**
  * Spec middleware
  */
-exports.specByID = function(req, res, next, id) {
+exports.specByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
