@@ -94,7 +94,7 @@ angular
 
       // Create file uploader instance
       var uploader = $scope.uploader = new FileUploader({
-        url: '/api/projects/' + $stateParams.projectId + '/upload'
+        url: '/api/projects/' + $stateParams.projectId + '/hars'
       });
 
 

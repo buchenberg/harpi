@@ -18,10 +18,6 @@ module.exports = function (app) {
     .put(projects.update)
     .delete(projects.delete);
 
-  //Upload HAR files
-  app.route('/api/projects/:projectId/upload').all(projectsPolicy.isAllowed)
-    .post(projects.uploadHar);
-
     //List HAR files in project. Also supports reportType param for aggregate queries.
   app.route('/api/projects/:projectId/hars').all(projectsPolicy.isAllowed)
     .get(projects.listHars)

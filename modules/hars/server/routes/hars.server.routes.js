@@ -18,6 +18,10 @@ module.exports = function(app) {
     .delete(hars.delete);
     //.post(hars.swaggerfy);
 
+  //List HAR files in project. Also supports reportType param for aggregate queries.
+  app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
+    .post(hars.createSwagger);
+
   // Finish by binding the Har middleware
   app.param('harId', hars.harByID);
 };

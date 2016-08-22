@@ -20,6 +20,7 @@ exports.create = function (req, res) {
 
   h2s.generateAsync(JSON.stringify(req.body), function (err, result) {
     if (err) {
+      console.log('error: ' + err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -36,7 +37,7 @@ exports.create = function (req, res) {
             message: errorHandler.getErrorMessage(err)
           });
         } else {
-          res.jsonp(spec);
+          res.jsonp(spec.swagger);
         }
       });
     }
