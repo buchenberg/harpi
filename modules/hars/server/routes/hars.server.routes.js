@@ -16,9 +16,8 @@ module.exports = function(app) {
     .get(hars.read)
     .put(hars.update)
     .delete(hars.delete);
-    //.post(hars.swaggerfy);
 
-  //List HAR files in project. Also supports reportType param for aggregate queries.
+  //Creqate spec from Har.
   app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
     .post(hars.createSwagger);
 

@@ -61,6 +61,15 @@ exports.read = function (req, res) {
 };
 
 /**
+ * Show the current Spec
+ */
+exports.readSwagger = function (req, res) {
+  // convert mongoose document to JSON
+  var spec = req.spec ? req.spec.toJSON() : {};
+  res.jsonp(spec.swagger);
+};
+
+/**
  * Update a Spec
  */
 exports.update = function (req, res) {

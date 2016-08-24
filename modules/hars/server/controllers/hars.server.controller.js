@@ -33,26 +33,23 @@ exports.create = function (req, res) {
 exports.createSwagger = function (req, res) {
   var user = req.user,
     har = req.har,
-    log = {
+    logObj = {
       log: har.log
     },
     harId = har._id;
-  console.log(JSON.stringify(log, null, 2));
+  console.log(JSON.stringify(logObj, null, 2));
 
-  h2s.generateAsync(JSON.stringify(log, null, 2), function (err, result) {
+  h2s.generateAsync(JSON.stringify(logObj, null, 2), function (err, result) {
     if (err) {
       console.log('error: ' + err);
       return res.status(400).send({
-        
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log('result: ' + JSON.stringify(result, null, 2));
       var spec = new Spec();
       spec.user = req.user;
       spec.title = har.name + '.swagger';
       spec.swagger = result.swagger;
-      // console.log('spec: ' + JSON.stringify(spec, null, 2));
       spec.save(function (err) {
         if (err) {
           return res.status(400).send({
