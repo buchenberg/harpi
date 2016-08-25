@@ -8,7 +8,7 @@
 
   SpecsController.$inject = ['$scope', '$state', 'Authentication', 'specResolve'];
 
-  function SpecsController ($scope, $state, Authentication, spec) {
+  function SpecsController($scope, $state, Authentication, spec) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -17,18 +17,29 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+    vm.swagger = JSON.stringify(spec.swagger, null, 2);
 
-    $scope.aceLoaded = function(_editor) {
+
+    // $scope.swaggerUrl = 'http://localhost:3000/api/specs/'+vm.spec._id+'/swagger.json';
+    $scope.swaggerUrl = 'http://petstore.swagger.io/v2/swagger.json';
+
+    $scope.aceLoaded = function (_editor) {
       // Options
       //_editor.setReadOnly(true);
-      _editor.setValue(JSON.stringify(spec.spec, null, 2));
+      _editor.setValue(vm.swagger);
       //_editor.$blockScrolling = Infinity;
       _editor.focus(); // To focus the ace editor
       _editor.selection.moveTo(0, 0);
-      _editor.onCopy = function() {
+      _editor.onCopy = function () {
         alert('What are you going to do with that text?');
       };
+    };
 
+    $scope.aceChanged = function (_editor) {
+      // Options
+      //_editor.setReadOnly(true);
+      //_editor.setValue('ff');
+      // alert('What are you going to do with that text?');
     };
 
     // Remove existing Spec
@@ -46,6 +57,7 @@
       }
       // TODO: move create/update logic to service
       if (vm.spec._id) {
+        vm.spec.swagger = JSON.parse(vm.swagger);
         vm.spec.$update(successCallback, errorCallback);
       } else {
         vm.spec.$save(successCallback, errorCallback);

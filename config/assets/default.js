@@ -5,7 +5,8 @@ module.exports = {
     lib: {
       css: [
         'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css'
+        'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+        'public/lib/angular-swagger-ui/dist/css/swagger-ui.css'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -15,10 +16,11 @@ module.exports = {
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/angular-ui-utils/ui-utils.js',
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-        'public/lib/angular-file-upload/angular-file-upload.js',
+        'public/lib/angular-file-upload/dist/angular-file-upload.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/ace-builds/src-min-noconflict/ace.js',
-        'public/lib/angular-ui-ace/ui-ace.js'
+        'public/lib/angular-ui-ace/ui-ace.js',
+        'public/lib/angular-swagger-ui/dist/scripts/swagger-ui.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

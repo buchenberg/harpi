@@ -1,5 +1,5 @@
 (function (app) {
   'use strict';
 
-  app.registerModule('specs');
+  app.registerModule('specs', ['swaggerUi']);
 })(ApplicationConfiguration);

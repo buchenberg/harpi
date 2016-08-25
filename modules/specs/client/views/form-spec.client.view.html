@@ -6,10 +6,10 @@
     <form name="vm.form.specForm" class="form-horizontal" ng-submit="vm.save(vm.form.specForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.spec.name" id="name" class="form-control" placeholder="Name" required>
-          <div ng-messages="vm.form.specForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Spec name is required.</p>
+          <label class="control-label" for="name">Title</label>
+          <input name="title" type="text" ng-model="vm.spec.title" id="title" class="form-control" placeholder="Title" required>
+          <div ng-messages="vm.form.specForm.title.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Spec title is required.</p>
           </div>
         </div>
 
@@ -19,11 +19,12 @@
         </div> -->
 
         <div class="form-group" show-errors>
-          <label class="control-label" for="spec">Spec</label>
+          <label class="control-label" for="spec">Swagger</label>
           <div name="spec" ui-ace="{ showGutter: true,
-           theme:'monokai',
-            mode: 'jsoniq',
-          onLoad: aceLoaded }" ng-model="vm.spec.spec"></div>
+            theme:'monokai',
+            mode: 'json',
+            onLoad: aceLoaded,
+            onChange: aceChanged }" ng-model="vm.swagger"></div>
         </div>
 
 
