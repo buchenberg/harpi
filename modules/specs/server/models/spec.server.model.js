@@ -27,11 +27,12 @@ var SpecSchema = new Schema({
     default: '',
     trim: true
   },
-  swagger: {},
+  swagger: {
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'
   }
-});
+}, { strict: false });
 
 mongoose.model('Spec', SpecSchema);
