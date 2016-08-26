@@ -17,7 +17,7 @@ module.exports = function(app) {
     .put(hars.update)
     .delete(hars.delete);
 
-  //Creqate spec from Har.
+  //Create spec from Har.
   app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
     .post(hars.createSwagger);
 

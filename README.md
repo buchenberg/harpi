@@ -22,6 +22,21 @@ Harpi is far from complete. Most of the work is being done at the API level now.
 
 ## REST API
 
-Verb | Path
----|---
-GET | /foo
+Verb | Path | Description
+---|---|---
+GET | /api/projects/{projectId} | Get project by id
+GET | /api/projects | List projects
+POST | /api/projects | Create project
+PUT | /api/projects | Update project
+DELETE | /api/projects/{projectId}  | Delete project by id
+GET | /api/hars/{harId} | Get har by id
+GET | /api/hars | List hars
+POST | /api/hars | Create har
+POST | /api/hars/{harId}/specs | Create new spec from har by id and add ref to har
+PUT | /api/hars/{harId} | Update har by id
+DELETE | /api/hars/{harId} | Delete har by id
+GET | /api/specs/{specId} | Get spec by id
+GET | /api/specs | List specs
+POST | /api/specs | Create spec
+PUT | /api/specs/{specId} | Update spec by id
+DELETE | /api/specs/{specId} | Delete spec by id
