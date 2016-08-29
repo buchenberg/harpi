@@ -19,22 +19,6 @@
     </h1>
     <p class="lead" ng-bind="project.description"></p>
   </div>
-  <div>
-    <table class="table-condensed" ng:repeat="request in projectHarURLs">
-      <thead>
-        <tr>
-          <th>Verb</th>
-          <th>Path</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng:repeat="url in request.requests">
-          <td>{{url.verb}}</td>
-          <td>{{url.path}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
   <!-- panel for har files -->
   <h3>Har files</h3>
   <div class="list-group col-md-12">

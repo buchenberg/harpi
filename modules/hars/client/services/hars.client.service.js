@@ -17,9 +17,7 @@
       },
       swaggerfy: {
         method: 'POST',
-        params: {
-          swaggerfy: true
-        }
+        url: 'api/hars/:harId/specs'
       }
     });
   }

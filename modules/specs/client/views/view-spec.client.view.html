@@ -1,20 +1,20 @@
 <section>
   <div class="page-header">
-    <h1 data-ng-bind="vm.spec.name"></h1>
+    <h1 data-ng-bind="vm.spec.title"></h1>
   </div>
-  <div class="pull-right"
-       data-ng-show="vm.spec.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       data-ui-sref="specs.edit({ specId: vm.spec._id })">
+  <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
+    <a class="btn btn-primary" data-ui-sref="specs.edit({ specId: vm.spec._id })">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
     <a class="btn btn-primary" data-ng-click="vm.remove()">
       <i class="glyphicon glyphicon-trash"></i>
     </a>
   </div>
+
+
   <small>
     <em class="text-muted">
-      Posted on
+      Created on
       <span data-ng-bind="vm.spec.created | date:'mediumDate'"></span>
       by
       <span data-ng-if="vm.spec.user"
@@ -23,7 +23,7 @@
     </em>
   </small>
   <p class="lead"></p>
-  <h2><span data-ng-bind="vm.spec.title"></span></h2>
+
   <div swagger-ui input-type="url" input="swaggerUrl" trusted-sources="true" validator-url="false"></div>
 
 </section>
