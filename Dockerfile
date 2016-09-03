@@ -4,10 +4,10 @@ RUN useradd --user-group --create-home --shell /bin/false app &&\
   npm install --global npm@3.7.5 &&\
   npm install --global grunt-cli@1.2.0 &&\
   npm install --global bower@1.7.9 &&\
-  npm install --global phantomjs-prebuilt@2.1.1
+  npm install --global phantomjs-prebuilt@2.1.12
 
 # Install gem sass for  grunt-contrib-sass
-RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz
+RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz default-jdk
 RUN gem install sass
 
 ENV HOME=/home/app
