@@ -9,6 +9,8 @@ var path = require('path'),
   Har = mongoose.model('Har'),
   Spec = mongoose.model('Spec'),
   h2s = require('har-to-swagger'),
+  plantuml = require('node-plantuml'),
+  pumlEncoder = require('plantuml-encoder'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -63,6 +65,32 @@ exports.createSwagger = function (req, res) {
       });
     }
   });
+
+};
+
+exports.createUML = function (req, res) {
+  var user = req.user,
+    har = req.har,
+    logObj = {
+      log: har.log
+    },
+    harId = har._id;
+  // console.log(JSON.stringify(logObj, null, 2));
+
+  var encoded = pumlEncoder.encode('A -> B: Hello')
+  console.log(encoded) // UDfpLD2rKt2oKl18pSd91m0KGWDz 
+  
+  plantuml.useNailgun();
+
+  res.set('Content-Type', 'image/svg+xml');
+
+  var decode = plantuml.decode(encoded);
+  var gen = plantuml.generate({format: 'svg'});
+
+  decode.out.pipe(gen.in);
+  gen.out.pipe(res);
+
+  // res.json({ 'encoded': encoded });
 
 };
 
