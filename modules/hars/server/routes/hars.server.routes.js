@@ -21,6 +21,10 @@ module.exports = function(app) {
   app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
     .post(hars.createSwagger);
 
+    //Test PlantUML
+  app.route('/api/hars/:harId/puml').all(harsPolicy.isAllowed)
+    .post(hars.createUML);
+
   // Finish by binding the Har middleware
   app.param('harId', hars.harByID);
 };

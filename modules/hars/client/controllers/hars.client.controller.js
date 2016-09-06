@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   // Hars controller
@@ -21,18 +21,19 @@
     vm.form = {};
     vm.remove = remove;
     vm.swaggerfy = swaggerfy;
+    vm.plantify = plantify;
     vm.save = save;
 
     //$scope.harText = JSON.stringify(har, null, 2);
 
-    $scope.aceLoaded = function(_editor) {
+    $scope.aceLoaded = function (_editor) {
       // Options
       _editor.setReadOnly(true);
       _editor.setValue(JSON.stringify(har.log, null, 2));
       _editor.$blockScrolling = Infinity;
       _editor.focus(); // To focus the ace editor
       _editor.selection.moveTo(0, 0);
-      _editor.onCopy = function() {
+      _editor.onCopy = function () {
         alert('What are you going to do with that text?');
       };
 
@@ -45,12 +46,19 @@
       }
     }
 
-    // Convert existing Har
+    // Convert existing Har to Swagger
     function swaggerfy() {
       if (confirm('Are you sure you want to swaggerfy?')) {
-        vm.har.$swaggerfy(        
+        vm.har.$swaggerfy(
           $state.go('specs.list')
         );
+      }
+    }
+
+    // Convert existing Har to UML Class Diagram
+    function plantify() {
+      if (confirm('Are you sure you want to planitify?')) {
+        vm.har.$plantify();
       }
     }
 

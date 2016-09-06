@@ -18,6 +18,10 @@
       swaggerfy: {
         method: 'POST',
         url: 'api/hars/:harId/specs'
+      },
+      plantify: {
+        method: 'POST',
+        url: 'api/hars/:harId/puml'
       }
     });
   }
