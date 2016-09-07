@@ -1,38 +1,45 @@
 <section>
     <div class="page-header">
         <h1>
-      <span data-ng-bind="vm.har.name"></span>
-      <div class='btn-toolbar pull-right' ng-show="vm.har.isCurrentUserOwner">
-        <div class='btn-group'>
-          <a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})">
-            <i class="glyphicon glyphicon-pencil"></i>
-          </a>
-          <a class="btn btn-danger" ng-click="vm.remove()">
-            <i class="glyphicon glyphicon-trash"></i>
-          </a>
-        </div>
-      </div>
-    </h1>
+            <span data-ng-bind="vm.har.name"></span>
+            <div class='btn-toolbar pull-right' ng-show="vm.har.isCurrentUserOwner">
+                <div class='btn-group'>
+                    <a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a>
+                    <a class="btn btn-danger" ng-click="vm.remove()">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </h1>
     </div>
-    <div class="container-fluid">
-        </div>
-        <div class="row-fluid">
+    <div class="row-fluid">
+        <h2>Entries
             <div class="pull-right">
-                <a class="btn btn-success" ng-click="vm.swaggerfy()"><span class="glyphicon glyphicon-cog" aria-hidden="true"> Swaggerfy</span></a>
-                <a class="btn btn-success" ng-click="vm.plantify()"><span class="glyphicon glyphicon-cog" aria-hidden="true"> Plantify</span></a>
+                <a class="btn btn-success" ng-click="vm.swaggerfy()">
+                Swaggerfy
+                </a>
             </div>
-        </div>
+        </h2>
 
-        <div class="row-fluid">
-            <h2>Entries</h2>
-            <div data-ng-repeat="entry in vm.har.log.entries">
-                <p><strong><span data-ng-bind="entry.startedDateTime" /></strong></p>
-                <p>Method: <span data-ng-bind="entry.request.method" /></p>
-                <p>URL: <span data-ng-bind="entry.request.url" /></p>
+        <div data-ng-repeat="entry in vm.har.log.entries">
+            <p><strong><span data-ng-bind="entry.startedDateTime" /></strong></p>
+            <p>Method: <span data-ng-bind="entry.request.method" /></p>
+            <p>URL: <span data-ng-bind="entry.request.url" /></p>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <h2>Sequence Diagram
+            <div class="pull-right">
+                <a class="btn btn-success" ng-click="vm.plantify()">
+                Generate
+                </a>
             </div>
-        </div>
+        </h2>
 
-        <div class="row-fluid">
-            <img ng-src="/api/hars/{{vm.har._id}}/puml">
-        </div>
+        <img ng-src="/api/hars/{{vm.har._id}}/puml">
+    </div>
+
 </section>

@@ -103,19 +103,51 @@ function pumlfy(log, callback) {
   var pumlText = '';
   for (var entry in log.entries) {
     if (log.entries.hasOwnProperty(entry)) {
-      switch (log.entries[entry].request.method) {
-        case 'GET':
-          pumlText += '"User Agent" -> "' +
-            log.entries[entry].request['x-puml-name'] +
-            '": get(' +
-            log.entries[entry].request.httpVersion +
-            ') \n';
+      var serviceName = log.entries[entry]['x-harpi-name'];
+      var method = log.entries[entry].request['method'].toLowerCase();
+      switch (method) {
+        case 'get':
+          pumlText += '"User Agent" -> "'
+            + serviceName
+            + '": '
+            + method
+            + '('
+            + log.entries[entry].request['x-harpi-description']
+            + ') \n'
+            + serviceName
+            + ' -> "User Agent": '
+            + log.entries[entry].response.status
+            + '('
+            + log.entries[entry].response.content['x-harpi-description']
+            + ') \n';
           break;
-        case 'POST':
-          pumlText += '"User Agent" -> "' + log.entries[entry].request.url + '": post(' + log.entries[entry].request.httpVersion + ') \n';
+        case 'put':
+          pumlText += '"User Agent" -> "'
+            + serviceName
+            + '": '
+            + method
+            + '('
+            + log.entries[entry].request.postData['x-harpi-description']
+            + ') \n'
+            + serviceName
+            + ' -> "User Agent": '
+            + log.entries[entry].response.status
+            + '('
+            + log.entries[entry].response.content['x-harpi-description']
+            + ') \n';
           break;
-        case 'PUT':
-          pumlText += '"User Agent" -> "' + log.entries[entry].request.url + '": put(' + log.entries[entry].request.httpVersion + ') \n';
+        default:
+          pumlText += '"User Agent" -> "'
+            + serviceName
+            + '": '
+            + method
+            + '() \n'
+            + serviceName
+            + ' -> "User Agent": '
+            + log.entries[entry].response.status
+            + '( '
+            + log.entries[entry].response.content['x-harpi-description']
+            + ' ) \n';
           break;
       }
     }
