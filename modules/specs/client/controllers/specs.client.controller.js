@@ -21,11 +21,11 @@
 
 
     $scope.swaggerUrl = window.location.origin+'/api/specs/'+vm.spec._id+'/swagger.json';
-    // $scope.swaggerUrl = 'http://petstore.swagger.io/v2/swagger.json';
 
     $scope.aceLoaded = function (_editor) {
       _editor.setValue(vm.swaggerText);
       _editor.focus(); // To focus the ace editor
+      _editor.$blockScrolling = Infinity;
       _editor.selection.moveTo(0, 0);
     };
 

@@ -12,6 +12,14 @@
             <p class="help-block error-text" ng-message="required">Har name is required.</p>
           </div>
         </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="har">HAR</label>
+          <div name="har" ui-ace="{ showGutter: true,
+            theme:'monokai',
+            mode: 'json',
+            onLoad: aceLoaded,
+            onChange: aceChanged }" ng-model="vm.harText"></div>
+        </div>
         <div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.har._id ? 'Update' : 'Create'}}</button>
         </div>

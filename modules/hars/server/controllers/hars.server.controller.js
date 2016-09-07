@@ -70,35 +70,61 @@ exports.createSwagger = function (req, res) {
 
 exports.readUML = function (req, res) {
   var har = req.har;
-
-  plantuml.useNailgun();
-
   // res.set('Content-Type', 'image/svg+xml');
   res.set('Content-Type', 'image/png');
-
   var decode = plantuml.decode(har.puml);
-  var gen = plantuml.generate({ format: 'png' });
   // var gen = plantuml.generate({format: 'svg'});
-
+  var gen = plantuml.generate({ format: 'png' });
   decode.out.pipe(gen.in);
   gen.out.pipe(res);
-
 };
 
 exports.createUML = function (req, res) {
   var har = req.har;
-  var encoded = pumlEncoder.encode('A -> B: Yo');
-  har.puml = encoded;
-  console.log(encoded);
-  har.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(har);
-    }
+  var log = har.log;
+  var pumlText = '';
+  pumlfy(log, function (data) {
+    pumlText = data;
+    var encoded = pumlEncoder.encode(pumlText);
+    har.puml = encoded;
+    har.save(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp(har);
+      }
+    });
   });
+};
+
+function pumlfy(log, callback) {
+  var pumlText = '';
+  for (var entry in log.entries) {
+    if (log.entries.hasOwnProperty(entry)) {
+      switch (log.entries[entry].request.method) {
+        case 'GET':
+          pumlText += '"User Agent" -> "' +
+            log.entries[entry].request['x-puml-name'] +
+            '": get(' +
+            log.entries[entry].request.httpVersion +
+            ') \n';
+          break;
+        case 'POST':
+          pumlText += '"User Agent" -> "' + log.entries[entry].request.url + '": post(' + log.entries[entry].request.httpVersion + ') \n';
+          break;
+        case 'PUT':
+          pumlText += '"User Agent" -> "' + log.entries[entry].request.url + '": put(' + log.entries[entry].request.httpVersion + ') \n';
+          break;
+      }
+    }
+  }
+  // Make sure the callback is a function​
+  if (typeof callback === 'function') {
+    // Call it, since we have confirmed it is callable​
+    callback(pumlText);
+  }
 };
 
 /**
