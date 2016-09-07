@@ -17,7 +17,7 @@ var path = require('path'),
  * body.log
  */
 exports.create = function (req, res) {
-    var spec = new Spec(req.body);
+  var spec = new Spec(req.body);
   spec.user = req.user;
 
   spec.save(function (err) {
@@ -29,33 +29,6 @@ exports.create = function (req, res) {
       res.json(spec);
     }
   });
-
-  // h2s.generateAsync(JSON.stringify(req.body), function (err, result) {
-  //   if (err) {
-  //     console.log('error: ' + err);
-  //     return res.status(400).send({
-  //       message: errorHandler.getErrorMessage(err)
-  //     });
-  //   } else {
-  //     console.log('result: ' + JSON.stringify(result, null, 2));
-  //     var spec = new Spec();
-  //     spec.user = req.user;
-  //     spec.title = req.body.title;
-  //     spec.swagger = result.swagger;
-  //     console.log('spec: ' + JSON.stringify(spec, null, 2));
-  //     spec.save(function (err) {
-  //       if (err) {
-  //         return res.status(400).send({
-  //           message: errorHandler.getErrorMessage(err)
-  //         });
-  //       } else {
-  //         res.jsonp(spec.swagger);
-  //       }
-  //     });
-  //   }
-  // });
-
-
 };
 
 /**
@@ -92,7 +65,7 @@ exports.update = function (req, res) {
   spec.save(function (err) {
     if (err) {
       return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
+        message: errorHandler.getErrorMessageNew(err)
       });
     } else {
       res.jsonp(spec);

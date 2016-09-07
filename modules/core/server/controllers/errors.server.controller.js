@@ -42,3 +42,16 @@ exports.getErrorMessage = function (err) {
 
   return message;
 };
+
+/**
+ * Get the error message from error object
+ */
+exports.getErrorMessageNew = function (err) {
+  var message = '';
+  if (err.message) {
+    message = err.message;
+  } else {
+    message = 'Something went wrong';
+  }
+  return message;
+};
