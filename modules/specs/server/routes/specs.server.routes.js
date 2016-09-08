@@ -17,7 +17,7 @@ module.exports = function (app) {
     .put(specs.update)
     .delete(specs.delete);
 
-  app.route('/api/specs/:specId/swagger.json').get(specs.readSwagger);
+  app.route('/api/specs/:specId/swagger').get(specs.readSwagger);
 
   // Finish by binding the Spec middleware
   app.param('specId', specs.specByID);

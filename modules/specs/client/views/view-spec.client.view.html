@@ -1,18 +1,16 @@
 <section>
   <div class="page-header">
-    <h1 data-ng-bind="vm.spec.title"></h1>
-  </div>
-  <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
-    <a class="btn btn-primary" data-ui-sref="specs.edit({ specId: vm.spec._id })">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" data-ng-click="vm.remove()">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
+    <h1>
+      <span>{{vm.spec.title}} Specification</span>
+      <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
+        <a class="btn btn-danger" data-ng-click="vm.remove()">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+    </h1>
   </div>
 
-
-  <small>
+  <!--<small>
     <em class="text-muted">
       Created on
       <span data-ng-bind="vm.spec.created | date:'mediumDate'"></span>
@@ -21,9 +19,22 @@
             data-ng-bind="vm.spec.user.displayName"></span>
       <span data-ng-if="!vm.spec.user">Deleted User</span>
     </em>
-  </small>
-  <p class="lead"></p>
-
-  <div swagger-ui input-type="url" input="swaggerUrl" trusted-sources="true" validator-url="false"></div>
-
+  </small>-->
+  <uib-tabset active="active">
+    <uib-tab index="0" heading="Swagger">
+      <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
+        <a class="btn btn-primary" data-ui-sref="specs.edit({ specId: vm.spec._id })">
+          <i class="glyphicon glyphicon-edit"></i>
+        </a>
+        <a href="{{swaggerUrl}}">
+          Download
+        </a>
+      </div>
+      <div swagger-ui input-type="url" input="swaggerUrl" trusted-sources="true" validator-url="false" api-explorer="true" parser="json"></div>
+    </uib-tab>
+    <uib-tab index="1" heading="RAML">
+    </uib-tab>
+    <uib-tab index="2" heading="API Blueprint">
+    </uib-tab>
+  </uib-tabset>
 </section>

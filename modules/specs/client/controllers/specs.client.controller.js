@@ -20,7 +20,7 @@
     vm.swaggerText = JSON.stringify(spec.swagger, null, 2);
 
 
-    $scope.swaggerUrl = window.location.origin+'/api/specs/'+vm.spec._id+'/swagger.json';
+    $scope.swaggerUrl = window.location.origin+'/api/specs/'+vm.spec._id+'/swagger';
 
     $scope.aceLoaded = function (_editor) {
       _editor.setValue(vm.swaggerText);

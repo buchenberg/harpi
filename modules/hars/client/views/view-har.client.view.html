@@ -4,10 +4,10 @@
             <span data-ng-bind="vm.har.name"></span>
             <div class='btn-toolbar pull-right' ng-show="vm.har.isCurrentUserOwner">
                 <div class='btn-group'>
-                    <a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})">
-                        <i class="glyphicon glyphicon-pencil"></i>
+                    <a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})" uib-tooltip="edit">
+                        <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a class="btn btn-danger" ng-click="vm.remove()">
+                    <a class="btn btn-danger" ng-click="vm.remove()" uib-tooltip="delete">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 </div>
@@ -15,31 +15,39 @@
         </h1>
     </div>
     <div class="row-fluid">
-        <h2>Entries
-            <div class="pull-right">
-                <a class="btn btn-success" ng-click="vm.swaggerfy()">
-                Swaggerfy
-                </a>
-            </div>
-        </h2>
-
-        <div data-ng-repeat="entry in vm.har.log.entries">
-            <p><strong><span data-ng-bind="entry.startedDateTime" /></strong></p>
-            <p>Method: <span data-ng-bind="entry.request.method" /></p>
-            <p>URL: <span data-ng-bind="entry.request.url" /></p>
-        </div>
+        <uib-tabset active="active">
+            <uib-tab index="0" heading="Summary">
+                <h3>Entries</h3>
+                <p>
+                    <div data-ng-repeat="entry in vm.har.log.entries">
+                        <p><strong><span data-ng-bind="entry.startedDateTime" /></strong></p>
+                        <p>Method: <span data-ng-bind="entry.request.method" /></p>
+                        <p>URL: <span data-ng-bind="entry.request.url" /></p>
+                    </div>
+                </p>
+            </uib-tab>
+            <uib-tab index="1" heading="UML">
+                <p>
+                    <div class="row-fluid">
+                        <h3>Sequence Diagram
+                            <div class="pull-right">
+                                <a class="btn btn-success" ng-click="vm.plantify()" uib-tooltip="Generate a sequence diagram">Generate</a>
+                            </div>
+                        </h3>
+                        <img ng-src="/api/hars/{{vm.har._id}}/puml">
+                    </div>
+                </p>
+            </uib-tab>
+            <uib-tab index="2" heading="Swagger">
+                <p>
+                    <div class="pull-right">
+                        <a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Convert to Swagger">Swaggerfy</a>
+                    </div>
+                </p>
+            </uib-tab>
+        </uib-tabset>
     </div>
 
-    <div class="row-fluid">
-        <h2>Sequence Diagram
-            <div class="pull-right">
-                <a class="btn btn-success" ng-click="vm.plantify()">
-                Generate
-                </a>
-            </div>
-        </h2>
 
-        <img ng-src="/api/hars/{{vm.har._id}}/puml">
-    </div>
 
 </section>

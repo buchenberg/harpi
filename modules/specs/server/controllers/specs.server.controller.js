@@ -51,7 +51,7 @@ exports.read = function (req, res) {
 exports.readSwagger = function (req, res) {
   // convert mongoose document to JSON
   var spec = req.spec ? req.spec.toJSON() : {};
-  res.jsonp(spec.swagger);
+  res.json(spec.swagger);
 };
 
 /**

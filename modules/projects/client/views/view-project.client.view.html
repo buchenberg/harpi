@@ -1,58 +1,78 @@
 <section ng-controller="ProjectsController" ng-init="findOne()">
   <div class="page-header">
     <h1>
-      <span>{{project.title}}</span>
+      <span>{{project.title}} Project</span>
       <div class='btn-toolbar pull-right' ng-show="authentication.user._id == project.user._id">
         <div class='btn-group'>
           <a class="btn btn-primary" ui-sref="projects.edit({projectId: project._id})">
-            <i class="glyphicon glyphicon-pencil"></i>
+            <i class="glyphicon glyphicon-edit"></i>
           </a>
           <a class="btn btn-danger" ng-click="remove();">
             <i class="glyphicon glyphicon-trash"></i>
           </a>
-          <a class="btn btn-warning" ui-sref="projects.viewUrls({projectId: project._id})">
-            <i class="glyphicon glyphicon-fire"></i> URL Report
-          </a>
         </div>
-
       </div>
     </h1>
     <p class="lead" ng-bind="project.description"></p>
   </div>
-  <!-- panel for har files -->
-  <h3>Har files</h3>
-  <div class="list-group col-md-12">
-    <li data-ng-repeat="har in project.hars" class="list-group-item">
-      <h4 class="list-item-heading"><span class="glyphicon glyphicon-file"></span> {{har.name}}
-        <div class="btn-toolbar pull-right">
-          <a class="btn btn-xs btn-primary" data-ui-sref="hars.view({ harId: har._id })">
-            <i class="glyphicon glyphicon-eye-open"></i>
-          </a>
-          <!--<button class="btn btn-xs btn-danger pull-right" ng-click="alert('hey')">
-            <i class="glyphicon glyphicon-trash"></i>
-        </button>-->
+  <uib-tabset active="active">
+    <uib-tab index="0" heading="Har Files">
+      <div class="container">
+        <div class="text-center">
+          <h3>Here are your stupid Har files.</h3>
         </div>
-      </h4>
-    </li>
-  </div>
-  <div class="col-md-12" ng-show="authentication.user._id == project.user._id">
-    <form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate="" id="harForm">
-      <fieldset>
-        <div class="text-center form-group" ng-hide="uploader.queue.length">
-          <h3>Drag and drop a har file below.</h3>
-          <div class="upload-drop-zone" nv-file-drop="" uploader="uploader" id="har-drop-zone">Drop file here</div>
-          <h3>Or browse.</h3>
-          <label class="btn btn-primary btn-file"><i class="glyphicon glyphicon-search"></i> Browse<input type="file" nv-file-select="" uploader="uploader" style="display: none;">
+        <div class="list-group">
+          <li data-ng-repeat="har in project.hars" class="list-group-item">
+            <h4 class="list-item-heading"><span class="glyphicon glyphicon-file"></span> {{har.name}}
+              <div class="btn-toolbar pull-right">
+                <a class="btn btn-xs btn-primary" data-ui-sref="hars.view({ harId: har._id })">
+                  <i class="glyphicon glyphicon-eye-open"></i>
+                </a>
+              </div>
+            </h4>
+          </li>
+        </div>
+      </div>
+    </uib-tab>
+    <uib-tab index="1" heading="Add Har Files">
+      <div class="container" ng-show="authentication.user._id == project.user._id">
+        <ng-form name="harForm" class="form-horizontal" enctype="multipart/form-data" novalidate="" id="harForm">
+          <fieldset>
+            <div class="text-center form-group" ng-hide="uploader.queue.length">
+              <h3>Drag and drop a har file below.</h3>
+              <div class="upload-drop-zone" nv-file-drop="" uploader="uploader" id="har-drop-zone">Drop file here</div>
+              <h3>or</h3>
+              <label class="btn btn-primary btn-file"><i class="glyphicon glyphicon-search"></i> Browse<input type="file" nv-file-select="" uploader="uploader" style="display: none;">
             </label>
-        </div>
-        <div class="text-center form-group" ng-show="uploader.queue.length">
-          <h3>{{ uploader.queue.length }} file queued for upload.</h3>
-          <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
-          <button class="btn btn-danger" ng-click="cancelUpload()">Cancel</button>
-        </div>
-        <div ng-show="error" class="text-danger">
-        </div>
-      </fieldset>
-    </form>
+            </div>
+            <div class="text-center form-group" ng-show="uploader.queue.length">
+              <h3>{{ uploader.queue.length }} file queued for upload.</h3>
+              <button class="btn btn-primary" ng-click="uploadHarFile()">Upload</button>
+              <button class="btn btn-danger" ng-click="cancelUpload()">Cancel</button>
+            </div>
+            <div ng-show="error" class="text-danger">
+            </div>
+          </fieldset>
+        </ng-form>
+      </div>
+    </uib-tab>
+    <uib-tab index="2" heading="URL Report">
+      <div class="container" ng-init="urls({projectId: project._id});">
+    <table class="table-condensed" ng:repeat="request in projectHarURLs">
+      <thead>
+        <tr>
+          <th>Verb</th>
+          <th>Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng:repeat="url in request.requests">
+          <td>{{url.verb}}</td>
+          <td>{{url.path}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+    </uib-tab>
+  </uib-tabset>
 </section>
