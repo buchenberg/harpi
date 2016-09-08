@@ -25,10 +25,10 @@ angular.module('projects').config(['$stateProvider',
         url: '/:projectId',
         templateUrl: 'modules/projects/client/views/view-project.client.view.html'
       })
-      .state('projects.viewUrls', {
-        url: '/:projectId/urls',
-        templateUrl: 'modules/projects/client/views/view-project-urls.client.view.html'
-      })
+      // .state('projects.viewUrls', {
+      //   url: '/:projectId/urls',
+      //   templateUrl: 'modules/projects/client/views/view-project-urls.client.view.html'
+      // })
       .state('projects.edit', {
         url: '/:projectId/edit',
         templateUrl: 'modules/projects/client/views/edit-project.client.view.html',

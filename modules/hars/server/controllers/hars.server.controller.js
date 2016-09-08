@@ -50,17 +50,24 @@ exports.createSwagger = function (req, res) {
     } else {
       var spec = new Spec();
       spec.user = req.user;
-      spec.title = har.name + '.swagger';
+      spec.title = har.name;
       spec.swagger = result.swagger;
-      // console.log('result: \n ' + JSON.stringify(spec));
       spec.save(function (err) {
         if (err) {
           return res.status(400).send({
             message: err
           });
         } else {
-          har.spec = spec._id;
-          res.jsonp(har);
+          har.specs.push(spec._id);
+          har.save(function (err) {
+            if (err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              res.jsonp(har);
+            }
+          });
         }
       });
     }

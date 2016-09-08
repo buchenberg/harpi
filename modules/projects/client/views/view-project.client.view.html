@@ -58,21 +58,21 @@
     </uib-tab>
     <uib-tab index="2" heading="URL Report">
       <div class="container" ng-init="urls({projectId: project._id});">
-    <table class="table-condensed" ng:repeat="request in projectHarURLs">
-      <thead>
-        <tr>
-          <th>Verb</th>
-          <th>Path</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng:repeat="url in request.requests">
-          <td>{{url.verb}}</td>
-          <td>{{url.path}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        <table class="table-condensed" ng:repeat="request in projectHarURLs">
+          <thead>
+            <tr>
+              <th>Verb</th>
+              <th>Path</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng:repeat="url in request.requests">
+              <td>{{url.verb}}</td>
+              <td>{{url.path}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </uib-tab>
   </uib-tabset>
 </section>

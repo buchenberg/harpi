@@ -24,10 +24,10 @@ var HarSchema = new Schema({
   puml: {
     type: String
   },
-  spec: {
+  specs: [{
     type: Schema.ObjectId,
     ref: 'Spec'
-  },
+  }],
   user: {
     type: Schema.ObjectId,
     ref: 'User'

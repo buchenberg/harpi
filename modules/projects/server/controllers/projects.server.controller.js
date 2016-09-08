@@ -97,6 +97,7 @@ exports.list = function (req, res) {
  * TODO modularize the aggregate reports to seperate functions
  */
 exports.listHars = function (req, res) {
+  var project = req.project;
   if (Object.keys(req.query).length === 0) {
     Project.aggregate([
       {
@@ -131,7 +132,7 @@ exports.listHars = function (req, res) {
     });
   } else {
     var reportType = req.query.reportType;
-    switch (req.query.reportType) {
+    switch (reportType) {
       case 'url':
         Project.aggregate([
           {
@@ -206,9 +207,6 @@ exports.listHars = function (req, res) {
         res.json({ 'result': 'unrecognized report type' });
     }
   }
-
-
-
 };
 
 

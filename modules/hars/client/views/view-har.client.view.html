@@ -1,7 +1,7 @@
 <section>
     <div class="page-header">
         <h1>
-            <span data-ng-bind="vm.har.name"></span>
+            <span data-ng-bind="vm.har.name"></span> Har
             <div class='btn-toolbar pull-right' ng-show="vm.har.isCurrentUserOwner">
                 <div class='btn-group'>
                     <a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})" uib-tooltip="edit">
@@ -39,11 +39,17 @@
                 </p>
             </uib-tab>
             <uib-tab index="2" heading="Swagger">
-                <p>
-                    <div class="pull-right">
-                        <a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Convert to Swagger">Swaggerfy</a>
-                    </div>
-                </p>
+                <h3>
+                    OpenAPI (Swagger) Specifications
+                <div class="pull-right">
+                    <a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Generate Swagger from Har">Generate</a>
+                </div>
+                </h3>
+                <div class="list-group">
+                    <li data-ng-repeat="spec in vm.har.specs" class="list-group-item" data-ui-sref="specs.view({ specId: spec })">
+                        <h4 class="list-group-item-heading" data-ng-bind="spec"></h4>
+                    </li>
+                </div>
             </uib-tab>
         </uib-tabset>
     </div>
