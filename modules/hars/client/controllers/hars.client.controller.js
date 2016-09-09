@@ -7,10 +7,10 @@
     .controller('HarsController', HarsController);
 
   HarsController.$inject = ['$scope', '$state', 'Authentication',
-    'harResolve'
+    'harResolve', '$timeout'
   ];
 
-  function HarsController($scope, $state, Authentication, har) {
+  function HarsController($scope, $state, Authentication, har, $timeout) {
     var vm = this;
 
 
@@ -22,8 +22,11 @@
     vm.remove = remove;
     vm.swaggerfy = swaggerfy;
     vm.plantify = plantify;
+    vm.showUml = showUml;
     vm.save = save;
     vm.harText = JSON.stringify(har.log, null, 2);
+
+    if (vm.har.puml) vm.showUml();
 
     $scope.aceChanged = function (e) {
       vm.har.log = JSON.parse(vm.harText);
@@ -54,9 +57,18 @@
     function plantify() {
       vm.har.$plantify({},
         function (data) {
-          $scope.svg = data;
+          vm.showUml();
         }
       );
+    }
+
+    // Convert existing Har to UML Class Diagram
+    function showUml() {
+      //TODO get this right!
+      $timeout(function () {
+        //$scope.umlImageUrl = $scope.umlImageUrl + '?' + new Date().getTime();
+        $scope.umlImageUrl = "/api/hars/" + vm.har._id + "/puml" + "?" + new Date().getTime();
+      });
     }
 
     // Save Har
