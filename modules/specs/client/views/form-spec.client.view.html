@@ -1,8 +1,15 @@
 <section>
   <div class="page-header">
-    <h1>{{vm.spec._id ? 'Edit Specification' : 'New Specification'}}</h1>
+    <h1>{{vm.spec._id ? 'Edit Specification' : 'New Specification'}}
+      <button class="btn btn-default pull-right" ng-click="vm.validateSwagger()">
+      <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Validate</button>
+      <button class="btn btn-default pull-right" ng-click="vm.dereferenceSwagger()">
+      <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Dereference</button>
+    </h1>
+
   </div>
   <div class="col-md-12">
+
     <form name="vm.form.specForm" class="form-horizontal" ng-submit="vm.save(vm.form.specForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
@@ -14,8 +21,8 @@
         </div>
 
         <div class="form-group" show-errors>
-          <label class="control-label" for="spec">Swagger</label>
-          <div name="spec" ui-ace="{ showGutter: true,
+          <label class="control-label" for="swagger-editor">Swagger</label>
+          <div id="swagger-editor" name="swagger-editor" ui-ace="{ showGutter: true,
             theme:'monokai',
             mode: 'json',
             onLoad: aceLoaded,
@@ -26,11 +33,13 @@
 
         <div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.spec._id ? 'Update' : 'Create'}}</button>
+
         </div>
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>
         </div>
       </fieldset>
     </form>
+
   </div>
 </section>

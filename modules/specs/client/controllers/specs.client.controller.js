@@ -17,16 +17,20 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+    vm.validateSwagger = validateSwagger;
+    vm.dereferenceSwagger = dereferenceSwagger;
     vm.swaggerText = JSON.stringify(spec.swagger, null, 2);
+    
 
 
-    $scope.swaggerUrl = window.location.origin+'/api/specs/'+vm.spec._id+'/swagger';
+    $scope.swaggerUrl = window.location.origin + '/api/specs/' + vm.spec._id + '/swagger';
 
     $scope.aceLoaded = function (_editor) {
       _editor.setValue(vm.swaggerText);
       _editor.focus(); // To focus the ace editor
       _editor.$blockScrolling = Infinity;
       _editor.selection.moveTo(0, 0);
+      vm.editor = _editor;
     };
 
     $scope.aceChanged = function (e) {
@@ -40,25 +44,50 @@
       }
     }
 
+    // Validate Swagger 2.0
+    function validateSwagger() {
+      SwaggerParser.validate(vm.spec.swagger)
+        .then(function (api) {
+          console.log('Yay! The API is valid.');
+        })
+        .catch(function (err) {
+          vm.error = err.message;
+        });
+    }
+
+    // Validate Swagger 2.0
+    function dereferenceSwagger(_editor) {
+      SwaggerParser.dereference(vm.spec.swagger)
+        .then(function (api) {
+          var dereferencedSwagger = JSON.stringify(api, null, 2);
+          vm.editor.setValue(dereferencedSwagger, 1);
+        });
+    }
+
     // Save Spec
     function save(isValid) {
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.form.specForm');
         return false;
       }
-      // TODO: move create/update logic to service
-      if (vm.spec._id) {
-        vm.spec.$update(successCallback, errorCallback);
-      } else {
-        vm.spec.$save(successCallback, errorCallback);
-      }
+      SwaggerParser.validate(vm.spec.swagger)
+        .then(function (api) {
+          if (vm.spec._id) {
+            vm.spec.$update(successCallback, errorCallback);
+          } else {
+            vm.spec.$save(successCallback, errorCallback);
+          }
+        })
+        .catch(function (err) {
+          vm.error = err.message;
+        });
+
 
       function successCallback(res) {
         $state.go('specs.view', {
           specId: res._id
         });
       }
-
       function errorCallback(res) {
         vm.error = res.data.message;
       }
