@@ -24,6 +24,7 @@
     vm.resultText = '';
     vm.validationResultModalInstance = null;
     vm.closeModal = closeValidationResultModal;
+    vm.getDreddReportPartial = getDreddReportPartial;
 
 
 
@@ -40,6 +41,10 @@
     $scope.aceChanged = function (e) {
       vm.spec.swagger = JSON.parse(vm.swaggerText);
     };
+
+    function getDreddReportPartial() {
+      return './modules/specs/client/views/' + vm.spec._id + '-result.html';
+    }
 
     function openValidationResultModal() {
       vm.validationResultModalInstance = $uibModal.open({
@@ -77,17 +82,14 @@
         });
     }
 
-    // Validate Swagger 2.0
-    function testSwagger(res) {
+    // Dredd test Swagger 2.0
+    function testSwagger() {
       vm.spec.$test(
-        $state.go('specs.testResult', {
-          specId: vm.spec._id
-        })
-      );
-      console.log(res)
+        $scope.activeTab = 1
+      ); 
     }
 
-    // Validate Swagger 2.0
+    // Dereference
     function dereferenceSwagger(_editor) {
       SwaggerParser.dereference(vm.spec.swagger)
         .then(function (api) {

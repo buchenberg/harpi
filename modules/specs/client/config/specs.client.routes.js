@@ -49,19 +49,6 @@
           pageTitle: 'Edit Spec {{ specResolve.name }}'
         }
       })
-      .state('specs.testResult', {
-        url: '/:specId/result',
-        templateUrl: 'modules/specs/client/views/view-spec-result.client.view.html',
-        controller: 'SpecsController',
-        controllerAs: 'vm',
-        resolve: {
-          specResolve: getSpec
-        },
-        data: {
-          roles: ['user', 'admin'],
-          pageTitle: 'Dredd test results for {{ specResolve.name }}'
-        }
-      })
       .state('specs.view', {
         url: '/:specId',
         templateUrl: 'modules/specs/client/views/view-spec.client.view.html',

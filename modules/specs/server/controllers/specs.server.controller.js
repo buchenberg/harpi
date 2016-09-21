@@ -69,7 +69,7 @@ exports.testSwagger = function (req, res) {
       'silent': true,
       'inline-errors': true,
       'details': true,
-      'output': ['./modules/specs/client/views/result.html']
+      'output': [outFile]
     }
   };
   var dredd = new Dredd(configuration);

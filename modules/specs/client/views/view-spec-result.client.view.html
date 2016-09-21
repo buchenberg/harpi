@@ -1,8 +1,8 @@
 <section>
   <div class="page-header">
     <h1>
-      <span>{{vm.spec.title}} test results</span>
+      <span data-ng-bind="vm.spec.title"></span> test results
     </h1>
   </div>
-  <ng-include src="'/modules/specs/client/views/result.html'"></ng-include>
+  <ng-include src="vm.getDreddReportPartial()"></ng-include>
 </section>
