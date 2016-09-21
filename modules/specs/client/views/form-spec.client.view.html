@@ -2,14 +2,13 @@
   <div class="page-header">
     <h1>{{vm.spec._id ? 'Edit Specification' : 'New Specification'}}
       <button class="btn btn-default pull-right" ng-click="vm.validateSwagger()">
-      <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Validate</button>
+      <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Validate</button>
       <button class="btn btn-default pull-right" ng-click="vm.dereferenceSwagger()">
       <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Dereference</button>
     </h1>
 
   </div>
   <div class="col-md-12">
-
     <form name="vm.form.specForm" class="form-horizontal" ng-submit="vm.save(vm.form.specForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
@@ -42,4 +41,16 @@
     </form>
 
   </div>
+
+  <script type="text/ng-template" id="validationResultModal.html">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title" data-ng-bind="validationResultHeader"></h3>
+    </div>
+    <div class="modal-body" id="modal-body" data-ng-bind="validationResultText">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="vm.closeModal()">Close</button>
+    </div>
+  </script>
+
 </section>

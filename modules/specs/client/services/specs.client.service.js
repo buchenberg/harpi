@@ -14,6 +14,10 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      test: {
+        method: 'POST',
+        url: 'api/specs/:specId/dredd'
       }
     });
   }

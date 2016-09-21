@@ -26,8 +26,11 @@
         <a class="btn btn-primary" data-ui-sref="specs.edit({ specId: vm.spec._id })">
           <i class="glyphicon glyphicon-edit"></i>
         </a>
-        <a href="{{swaggerUrl}}">
+        <!--<a href="{{swaggerUrl}}">
           Download
+        </a>-->
+        <a class="btn btn-primary" data-ng-click="vm.testSwagger()">
+          <i class="glyphicon glyphicon-check"></i>
         </a>
       </div>
       <div swagger-ui input-type="url" input="swaggerUrl" trusted-sources="true" validator-url="false" api-explorer="true" parser="json"></div>

@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Spec = mongoose.model('Spec'),
   h2s = require('har-to-swagger'),
+  Dredd = require('dredd'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -52,6 +53,37 @@ exports.readSwagger = function (req, res) {
   // convert mongoose document to JSON
   var spec = req.spec ? req.spec.toJSON() : {};
   res.json(spec.swagger);
+};
+
+/**
+ * Test the current Spec using dredd
+ */
+exports.testSwagger = function (req, res) {
+  var swaggerPath = 'http://localhost:3000/api/specs/' + req.spec._id + '/swagger';
+  var outFile = './modules/specs/client/views/'+ req.spec._id +'-result.html'
+  var configuration = {
+    server: 'http://localhost:3000', // your URL to API endpoint the tests will run against
+    options: {
+      'path': [swaggerPath],
+      'reporter': ['html'], // Array of possible reporters, see folder src/reporters
+      'silent': true,
+      'inline-errors': true,
+      'details': true,
+      'output': ['./modules/specs/client/views/result.html']
+    }
+  };
+  var dredd = new Dredd(configuration);
+  dredd.run(function (err, stats) {
+    if (err) {
+      console.log(err);
+      console.log(stats);
+      res.status(400).send({
+        error: errorHandler.getErrorMessageNew(err)
+      });
+    } else {
+      res.jsonp(stats);
+    }
+  });
 };
 
 /**

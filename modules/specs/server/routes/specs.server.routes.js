@@ -19,6 +19,8 @@ module.exports = function (app) {
 
   app.route('/api/specs/:specId/swagger').get(specs.readSwagger);
 
+  app.route('/api/specs/:specId/dredd').post(specs.testSwagger);
+
   // Finish by binding the Spec middleware
   app.param('specId', specs.specByID);
 };
