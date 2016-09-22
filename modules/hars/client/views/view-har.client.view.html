@@ -41,9 +41,9 @@
             <uib-tab index="2" heading="Swagger">
                 <h3>
                     OpenAPI (Swagger) Specifications
-                <div class="pull-right">
-                    <a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Generate Swagger from Har">Generate</a>
-                </div>
+                    <div class="pull-right">
+                        <a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Generate Swagger from Har">Generate</a>
+                    </div>
                 </h3>
                 <div class="list-group">
                     <li data-ng-repeat="spec in vm.har.specs" class="list-group-item" data-ui-sref="specs.view({ specId: spec })">
@@ -53,6 +53,17 @@
             </uib-tab>
         </uib-tabset>
     </div>
+
+    <script type="text/ng-template" id="errorModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title" data-ng-bind="errorHeader"></h3>
+        </div>
+        <div class="modal-body" id="modal-body" data-ng-bind="errorText">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="vm.closeModal()">Close</button>
+        </div>
+    </script>
 
 
 
