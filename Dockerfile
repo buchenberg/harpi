@@ -27,6 +27,7 @@ USER app
 
 # Port 3000 for server
 # Port 35729 for livereload
-EXPOSE 3000 35729
-CMD ["grunt", "--force"]
+# Port 5858 for node debug
+EXPOSE 3000 35729 5858
+CMD ["grunt", "debug", "--force"]
 

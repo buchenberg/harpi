@@ -1,0 +1,8 @@
+web:
+  build: .
+  command: [grunt, prod, --force]
+  environment: 
+   NODE_ENV: production
+db:
+  image: mongo
+

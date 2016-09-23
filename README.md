@@ -52,3 +52,15 @@ The main docker-compose.yml configuration is suitable for development. For runni
 ```bash
 docker-compose up
 ```
+
+For Windows
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.windows.yml up -d
+```
+
+Production
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
