@@ -1,7 +1,11 @@
-web:
-  image: buchenberg/harpi:latest
-  links:
-   - db
-db:
-  image: mongo
+version: '2'
+services:
+  web:
+    image: buchenberg/harpi
+    links:
+      - db
+    depends_on:
+      - db
+  db:
+    image: mongo:3.3
 

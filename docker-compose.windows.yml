@@ -1,15 +1,21 @@
-web:
-  build: .
-  ports:
-   - "3000:3000"
-   - "35729:35729"
-   - "5858:5858"
-  environment: 
-   NODE_ENV: development
-  volumes:
-    - .:/home/app/harpi
-    - /home/app/harpi/node_modules
-db:
-  image: mongo
-  ports: 
-   - "27017:27017"
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: harpi-dev-web
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+      - "5858:5858"
+    environment: 
+      NODE_ENV: development
+    volumes:
+      - .:/home/app/harpi
+      - /home/app/harpi/node_modules
+  db:
+    container_name: harpi-dev-db
+    ports: 
+    - "27017:27017"
