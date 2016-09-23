@@ -44,3 +44,11 @@ GET | /api/specs | List specs
 POST | /api/specs | Create spec
 PUT | /api/specs/{specId} | Update spec by id
 DELETE | /api/specs/{specId} | Delete spec by id
+
+## Running in a Docker container
+
+The main docker-compose.yml configuration is suitable for development. For running a dev environment with live reload just run the following.
+
+```bash
+docker-compose up
+```

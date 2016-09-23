@@ -1,0 +1,205 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "Harpi API"
+    },
+    "host": "localhost:3000",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/api/projects": {
+            "get": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "title": "ProjectArrayModel",
+                            "description": "An array of projects.",
+                            "items": {
+                                "type": "object",
+                                "title": "ProjectModel",
+                                "description": "A project.",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "default": "57e47cfc2c0c4d23006c052b"
+                                    },
+                                    "user": {
+                                        "type": "string",
+                                        "description": "User identifier.",
+                                        "default": "57e47cf22c0c4d23006c052a"
+                                    },
+                                    "__v": {
+                                        "type": "integer",
+                                        "default": 1
+                                    },
+                                    "hars": {
+                                        "type": "array",
+                                        "description": "An arry of Har file identifiers.",
+                                        "items": {
+                                            "type": "string",
+                                            "description": "A Har file identifier",
+                                            "default": "57e47d8b2c0c4d23006c052c"
+                                        }
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "A project description.",
+                                        "default": ""
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "description": "A project title.",
+                                        "default": "Harpi API"
+                                    },
+                                    "created": {
+                                        "type": "string",
+                                        "description": "A created timestamp.",
+                                        "default": "2016-09-23T00:53:16.076Z"
+                                    }
+                                },
+                                "required": [
+                                    "_id",
+                                    "user",
+                                    "__v",
+                                    "hars",
+                                    "description",
+                                    "title",
+                                    "created"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projects/{projectId}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "title": "Project schema.",
+                            "description": "A project.",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "default": "57e47cfc2c0c4d23006c052b"
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "default": "57e47cf22c0c4d23006c052a"
+                                        },
+                                        "displayName": {
+                                            "type": "string",
+                                            "default": "G B"
+                                        }
+                                    },
+                                    "required": [
+                                        "_id",
+                                        "displayName"
+                                    ]
+                                },
+                                "__v": {
+                                    "type": "integer",
+                                    "default": 1
+                                },
+                                "hars": {
+                                    "type": "array",
+                                    "title": "Hars schema.",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "default": "57e47d8b2c0c4d23006c052c"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "default": "Harpi API"
+                                            }
+                                        },
+                                        "required": [
+                                            "_id",
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "default": "It's a gas!"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "default": "Harpi API"
+                                },
+                                "created": {
+                                    "type": "string",
+                                    "default": "2016-09-23T00:53:16.076Z"
+                                }
+                            },
+                            "required": [
+                                "_id",
+                                "user",
+                                "__v",
+                                "hars",
+                                "description",
+                                "title",
+                                "created"
+                            ]
+                        }
+                    },
+                    "304": {
+                        "description": "Unchanged"
+                    },
+                    "400": {
+                        "description": "Project invalid",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "default": "Project is invalid"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "default": "No project with that identifier has been found"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
