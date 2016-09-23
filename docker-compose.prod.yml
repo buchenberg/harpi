@@ -8,4 +8,4 @@ services:
       NODE_ENV: production
     command: ["grunt", "prod", "--force"]
   db:
-    image: mongo:3.3
+    image: mongo

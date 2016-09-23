@@ -47,19 +47,19 @@ DELETE | /api/specs/{specId} | Delete spec by id
 
 ## Running in a Docker container
 
-The main docker-compose.yml configuration is suitable for development. For running a dev environment with live reload just run the following.
+The main docker-compose.yml configuration is suitable for development. For running a development environment with live reload just run the following. By default docker-compose will use docker-compose.yml and the docker-compose.override.yml to build the stack.
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
-For Windows
+For Windows you will need to provide the docker-compose custom override like so.
 
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.windows.yml up -d
 ```
 
-Production
+Production environments have no shared volumes and no unnecessarily exposed ports.
 
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

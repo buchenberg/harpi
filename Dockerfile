@@ -7,8 +7,9 @@ RUN useradd --user-group --create-home --shell /bin/false app &&\
   npm install --global phantomjs-prebuilt@2.1.12
 
 # Install gem sass for  grunt-contrib-sass
-RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz default-jdk zlib1g-dev libreadline-dev libssl-dev libcurl4-openssl-dev
-RUN gem install sass
+RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz openjdk-7-jre && gem install sass
+# zlib1g-dev libreadline-dev libssl-dev libcurl4-openssl-dev
+# RUN gem install sass
 
 ENV HOME=/home/app
 

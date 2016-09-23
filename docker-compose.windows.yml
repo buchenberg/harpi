@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: harpi-dev-web
     ports:
       - "3000:3000"
       - "35729:35729"
@@ -15,8 +14,6 @@ services:
     volumes:
       - .:/home/app/harpi
       - /home/app/harpi/node_modules
-    command: ["grunt", "debug", "--force"]
   db:
-    container_name: harpi-dev-db
     ports: 
-    - "27017:27017"
+      - "27017:27017"
