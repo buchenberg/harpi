@@ -31,7 +31,7 @@
             "sourceMaps": false,
             "outDir": null,
             "localRoot": "${workspaceRoot}",
-            "remoteRoot": null
+            "remoteRoot": "/home/app/harpi/"
         },
         {
             "name": "Attach to Process",
