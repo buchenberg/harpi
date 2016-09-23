@@ -24,7 +24,10 @@ COPY . $HOME/harpi
 RUN chown -R app:app $HOME/*
 USER app
 
+
 # Port 3000 for server
-EXPOSE 3000
-CMD ["grunt", "prod", "--force"]
+# Port 35729 for livereload
+# Port 5858 for node debug
+EXPOSE 3000 35729 5858
+CMD ["grunt", "debug", "--force"]
 
