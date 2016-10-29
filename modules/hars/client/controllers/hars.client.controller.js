@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     'use strict';
 
@@ -29,11 +29,75 @@
 
         if (vm.har.puml) showUml();
 
-        $scope.aceChanged = function(e) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                entries: {
+                    type: "array",
+                    items:
+                    {
+                        title: "Entry",
+                        type: "object",
+                        properties: {
+                            "x-service-name": {
+                                title: "Service Name",
+                                type: "string",
+                                description: "e.g. 'Widget'"
+                            },
+                            "x-resource-name": {
+                                title: "Resource Name",
+                                type: "string",
+                                description: "e.g. 'Widget'"
+                            },
+                            "request": {
+                                title: "Request",
+                                type: "object",
+                                properties: {
+                                    "method": {
+                                        title: "Method",
+                                        type: "string"
+                                    },
+                                    "url": {
+                                        title: "URL",
+                                        type: "string"
+                                    }
+                                }
+                            },
+                            "response": {
+                                title: "Response",
+                                type: "object",
+                                properties: {
+                                    "status": {
+                                        title: "Status",
+                                        type: "string"
+                                    },
+                                    "statusText": {
+                                        title: "Status Text",
+                                        type: "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
+
+        $scope.model = har.log;
+
+        $scope.aceChanged = function (e) {
             vm.har.log = JSON.parse(vm.harText);
         };
 
-        $scope.aceLoaded = function(_editor) {
+        $scope.aceLoaded = function (_editor) {
             _editor.setValue(vm.harText);
             _editor.focus(); // To focus the ace editor
             _editor.$blockScrolling = Infinity;
@@ -93,7 +157,7 @@
         // load up the umlImageUrl with timestamp to force a refresh of the binding.
         function showUml() {
             //TODO get this right!
-            $timeout(function() {
+            $timeout(function () {
                 $scope.umlImageUrl = "/api/hars/" + vm.har._id + "/puml" + "?" + new Date().getTime();
             });
         }

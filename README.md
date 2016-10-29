@@ -2,7 +2,7 @@
 
 # Harpi
 
-Harpi is an HTTP Archive pipeline. It helps in analysing web API's by converting HTTP Archive files to testable OpenAPI (Swagger) documentation.
+Harpi is an HTTP Archive pipeline. It helps in documenting existing web API's by converting Har files to UML diagrams and Swagger documentation.
 
 
 ## Status
@@ -18,6 +18,7 @@ Harpi is far from complete. Most of the work is being done at the API level now.
 ## Goals
 
 * Har to UML Class Diagram
+* Har to Markdown documentation
 * Add metadata to HAR like x-swagger-definition using form.
 * Take advantage of versioning for the Swagger specs.
 * Dredd testing for Swagger.

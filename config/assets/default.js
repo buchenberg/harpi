@@ -21,7 +21,11 @@ module.exports = {
         'public/lib/ace-builds/src-min-noconflict/ace.js',
         'public/lib/angular-ui-ace/ui-ace.js',
         'public/lib/angular-swagger-ui/dist/scripts/swagger-ui.js',
-        'public/lib/swagger-parser/dist/swagger-parser.js'
+        'public/lib/swagger-parser/dist/swagger-parser.js',
+        'public/lib/tv4/tv4.js',
+        'public/lib/objectpath/lib/ObjectPath.js',
+        'public/lib/angular-schema-form/dist/schema-form.min.js',
+        'public/lib/angular-schema-form/dist/bootstrap-decorator.min.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
