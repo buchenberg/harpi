@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+patcher = require('mongoose-json-patch'),
   Schema = mongoose.Schema;
 
 /**
@@ -33,5 +34,7 @@ var HarSchema = new Schema({
     ref: 'User'
   }
 });
+
+HarSchema.plugin(patcher);
 
 mongoose.model('Har', HarSchema);

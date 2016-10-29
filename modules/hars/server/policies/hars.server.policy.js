@@ -28,7 +28,7 @@ exports.invokeRolesPolicies = function () {
                 permissions: ['get', 'post']
             }, {
                     resources: '/api/hars/:harId',
-                    permissions: ['get']
+                    permissions: ['get', 'patch']
                 }, {
                     resources: '/api/hars/:harId/puml',
                     permissions: ['get', 'post']
@@ -46,10 +46,10 @@ exports.invokeRolesPolicies = function () {
                     permissions: ['get']
                 }, {
                     resources: '/api/hars/:harId/puml',
-                    permissions: ['get', 'post']
+                    permissions: ['get']
                 }, {
                     resources: '/api/hars/:harId/specs',
-                    permissions: ['post']
+                    permissions: ['get']
                 }]
         }]);
 };

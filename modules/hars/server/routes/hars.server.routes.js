@@ -15,7 +15,8 @@ module.exports = function (app) {
   app.route('/api/hars/:harId').all(harsPolicy.isAllowed)
         .get(hars.read)
         .put(hars.update)
-        .delete(hars.delete);
+        .delete(hars.delete)
+        .patch(hars.patch);
 
     //Create spec from Har.
   app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
@@ -25,6 +26,7 @@ module.exports = function (app) {
   app.route('/api/hars/:harId/puml').all(harsPolicy.isAllowed)
         .get(hars.readUML)
         .post(hars.createUML);
+        
 
     // Finish by binding the Har middleware
   app.param('harId', hars.harByID);
