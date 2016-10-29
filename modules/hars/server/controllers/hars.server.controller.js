@@ -10,6 +10,7 @@ var path = require('path'),
   Spec = mongoose.model('Spec'),
   h2s = require('har-to-swagger'),
   plantuml = require('node-plantuml'),
+  url = require('url'),
   pumlEncoder = require('plantuml-encoder'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
@@ -96,7 +97,7 @@ exports.patch = function (req, res) {
 };
 
 /**
- * Delete an Har
+ * Delete a Har
  */
 exports.delete = function (req, res) {
   var har = req.har;
@@ -230,9 +231,25 @@ function pumlfy(log, callback) {
   var pumlText = '';
   for (var entry in log.entries) {
     if (log.entries.hasOwnProperty(entry)) {
+
+      var requestUrlObj = url.parse(log.entries[entry].request.url);
+      //var resourceGuess = requestUrlObj.pathname.split("/").pop();
       // Service name
-      var serviceName = log.entries[entry].request['x-service-name'];
+      var serviceName = log.entries[entry]['x-service-name'] || requestUrlObj.pathname;
+      var resourceName = log.entries[entry]['x-resource-name'] || requestUrlObj.pathname.split("/").pop();
       var method = log.entries[entry].request.method.toLowerCase();
+      var resStatus = log.entries[entry].response.status;
+      
+      var resStatusText;
+      switch (log.entries[entry].response.status) {
+        case 200:
+          resStatusText = '';
+            break;
+        default:
+          resStatusText = ' ' + log.entries[entry].response.statusText;
+            break;
+      }
+
       // Query params
       var queryParams = '';
       for (var qParam in log.entries[entry].request.queryString) {
@@ -247,31 +264,21 @@ function pumlfy(log, callback) {
       var allParams = queryParams + pathParams;
 
       pumlText +=
-        '"User Agent" -> ' +
+        '"User Agent" -> ' + //request
         '"' + serviceName + '"' +
-        ': ' + method + '-' + log.entries[entry].request['x-resource-name'] +
+        ': ' + method + resourceName.charAt(0).toUpperCase() + resourceName.slice(1) +
         '(' +
         allParams.replace(/,\s*$/, '') +
         ') \n' +
         'note right: ' +
-        log.entries[entry].request.url +
-        '\n' +
-        '"' + serviceName + '"' +
-        ' -> "User Agent": ' +
-        log.entries[entry].response.status +
-        '(' +
-        log.entries[entry].response['x-resource-name'] +
-        ') \n';
-
-      // Switch example
-      //   switch (method) {
-      //     case 'get':
-      //       pumlText +=
-      //       break;
-      //     default:
-      //       pumlText +=
-      //       break;
-      //   }
+        requestUrlObj.pathname +
+        '\n' + //response
+        '"' + serviceName + '"' + //service
+        ' -> "User Agent": ' + //client
+        resStatus + //method (status?)
+        '( ' +
+        resourceName + resStatusText + //params (payload)
+        ' ) \n';
     }
   }
   // Make sure the callback is a function​
