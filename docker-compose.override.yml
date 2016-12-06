@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: ./.docker/dev/Dockerfile
     ports:
       - "3000:3000"
       - "35729:35729"
@@ -14,6 +14,7 @@ services:
     volumes:
       - .:/home/app/harpi
       - /home/app/harpi/node_modules
+      - /home/app/harpi/public/lib
   db:
     ports: 
       - "27017:27017"

@@ -6,15 +6,13 @@ RUN useradd --user-group --create-home --shell /bin/false app &&\
   npm install --global bower@1.7.9 &&\
   npm install --global phantomjs-prebuilt@2.1.12
 
-# Install gem sass for  grunt-contrib-sass
-RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz openjdk-7-jre zlib1g-dev libreadline-dev libssl-dev libcurl4-openssl-dev && gem install sass
-# zlib1g-dev libreadline-dev libssl-dev libcurl4-openssl-dev
-# RUN gem install sass
+# Install gem sass for  grunt-contrib-sass plus graphviz and jre for puml
+RUN apt-get update -qq && apt-get install -y build-essential ruby graphviz default-jre && gem install sass
 
 ENV HOME=/home/app
 
 COPY package.json bower.json .bowerrc $HOME/harpi/
-RUN chown -R app:app $HOME/*
+RUN mkdir -p $HOME/harpi/public/lib && chown -R app:app $HOME/*
 
 USER app
 WORKDIR $HOME/harpi
@@ -25,7 +23,9 @@ COPY . $HOME/harpi
 RUN chown -R app:app $HOME/*
 USER app
 
-# Port 3000 for server
-EXPOSE 3000
-CMD ["grunt", "prod", "--force"]
 
+# Port 3000 for server
+# Port 35729 for livereload
+# Port 5858 for node debugging
+EXPOSE 3000 35729 5858
+CMD ["grunt", "debug", "--force"]
