@@ -36,20 +36,20 @@ exports.invokeRolesPolicies = function () {
                     resources: '/api/hars/:harId/specs',
                     permissions: ['post']
                 }]
-        }, {
+        },         {
             roles: ['guest'],
             allows: [{
                 resources: '/api/hars',
-                permissions: ['get']
+                permissions: ['get', 'post']
             }, {
                     resources: '/api/hars/:harId',
-                    permissions: ['get']
+                    permissions: ['get', 'delete']
                 }, {
                     resources: '/api/hars/:harId/puml',
                     permissions: ['get']
                 }, {
                     resources: '/api/hars/:harId/specs',
-                    permissions: ['get']
+                    permissions: ['get', 'post']
                 }]
         }]);
 };
@@ -65,16 +65,52 @@ exports.isAllowed = function (req, res, next) {
         return next();
     }
 
+    // Get the route path - use req.route.path if available, otherwise use req.path
+    var resource = req.route && req.route.path ? req.route.path : req.path;
+    
+    // Normalize the resource path to match ACL definitions
+    // Remove query strings
+    resource = resource.split('?')[0];
+    
+    // In development, log the ACL check for debugging
+    if (process.env.NODE_ENV === 'development') {
+        console.log('[ACL] Checking access:', {
+            resource: resource,
+            method: req.method.toLowerCase(),
+            roles: roles,
+            routePath: req.route ? req.route.path : 'undefined',
+            reqPath: req.path
+        });
+    }
+    
     // Check for user roles
-    acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
+    acl.areAnyRolesAllowed(roles, resource, req.method.toLowerCase(), function (err, isAllowed) {
         if (err) {
+            // Log the error for debugging
+            console.error('[ACL] Authorization error:', err);
+            console.error('[ACL] Details:', {
+                resource: resource,
+                method: req.method.toLowerCase(),
+                roles: roles,
+                routePath: req.route ? req.route.path : 'undefined',
+                reqPath: req.path
+            });
             // An authorization error occurred
-            return res.status(500).send('Unexpected authorization error');
+            return res.status(500).json({
+                message: 'Unexpected authorization error',
+                error: process.env.NODE_ENV === 'development' ? err.message : undefined
+            });
         } else {
             if (isAllowed) {
                 // Access granted! Invoke next middleware
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('[ACL] Access granted for', resource);
+                }
                 return next();
             } else {
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('[ACL] Access denied for', resource, 'with roles', roles);
+                }
                 return res.status(403).json({
                     message: 'User is not authorized'
                 });

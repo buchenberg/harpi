@@ -55,9 +55,6 @@ harpi/
 - Node.js 18+ 
 - npm 8+
 - MongoDB
-- **Java** (required for PlantUML UML diagram generation)
-  - If Java is not installed, the installation will skip postinstall scripts
-  - PlantUML features will not work without Java installed
 
 ### Installation
 
@@ -71,8 +68,6 @@ harpi/
    ```bash
    npm run install:all
    ```
-   
-   **Note:** If Java is not installed, the installation will skip postinstall scripts to allow installation to complete. Java is required for PlantUML UML diagram generation features. You can install Java later and the PlantUML features will work once Java is available.
 
 3. **Set up environment variables**
    ```bash
@@ -81,11 +76,31 @@ harpi/
    ```
 
 4. **Start MongoDB**
+
+   You have two options:
+
+   **Option A: Run MongoDB in Docker (Recommended)**
    ```bash
-   # Make sure MongoDB is running on your system
+   # Start only the MongoDB service
+   docker-compose up -d db
+   
+   # MongoDB will be available at mongodb://localhost:27017
+   # The database will be persisted in ./data/db directory
+   ```
+
+   **Option B: Install MongoDB locally**
+   ```bash
+   # Install and start MongoDB on your system
+   # Make sure MongoDB is running on localhost:27017
    ```
 
 ### Development
+
+#### Running with Docker MongoDB
+
+If you're using Docker for MongoDB (Option A above), the server will automatically connect to `mongodb://localhost:27017/harpi-dev` in development mode.
+
+**Start both client and server in development mode:**
 
 **Start both client and server in development mode:**
 ```bash
@@ -93,17 +108,74 @@ npm run dev
 ```
 
 This will start:
-- Server on `http://localhost:3001`
-- Client on `http://localhost:3000` (with hot reload)
+- Server on `http://localhost:3000`
+- Client on `http://localhost:3001` (with hot reload, proxies API requests to server)
 
 **Or start them separately:**
 ```bash
-# Server only
+# Server only (runs on http://localhost:3000)
 npm run dev:server
 
-# Client only  
+# Client only (runs on http://localhost:3001, proxies API to server)
 npm run dev:client
 ```
+
+**Important:** Make sure to start the server **before** the client, as the client's Vite proxy needs the server to be running on port 3000.
+
+#### Troubleshooting Connection Issues
+
+If you see proxy errors like `ECONNREFUSED` when the client tries to connect to the server:
+
+1. **Verify the server is running:**
+   ```bash
+   # Check if server is running on port 3000
+   # You should see output like:
+   # Environment:			development
+   # Port:				3000
+   # Database:				mongodb://localhost:27017/harpi-dev
+   ```
+
+2. **Check port conflicts:**
+   ```bash
+   # On Windows (PowerShell)
+   netstat -ano | findstr :3000
+   
+   # On Linux/Mac
+   lsof -i :3000
+   ```
+
+3. **Verify MongoDB is running:**
+   ```bash
+   # If using Docker
+   docker-compose ps
+   
+   # The server won't start if MongoDB isn't available
+   ```
+
+4. **Start order matters:**
+   - First: Start MongoDB (`docker-compose up -d db`)
+   - Second: Start the server (`npm run dev:server`) - **Wait for it to fully start**
+   - Third: Start the client (`npm run dev:client`)
+
+5. **Check server logs for successful startup:**
+   The server should show output like this when it starts successfully:
+   ```
+   Successfully connected to MongoDB!
+   --
+   Harpi - Development Environment
+   Environment:			development
+   Port:				3000
+   Database:				mongodb://localhost:27017/harpi-dev
+   --
+   ```
+   
+   **If you don't see this output, the server didn't start and the client can't connect.**
+
+6. **Common issues:**
+   - **MongoDB not running**: Start it with `docker-compose up -d db`
+   - **Server crashed on startup**: Check for MongoDB connection errors in server logs
+   - **Port 3000 already in use**: Stop other services using port 3000 or change the server port
+   - **MongoDB connection timeout**: Verify MongoDB is accessible at `mongodb://localhost:27017`
 
 ### Production
 
@@ -202,6 +274,10 @@ cd client && npm run test:coverage
 
 The application includes Docker configurations for development and production:
 
+### Full Docker Setup
+
+Run everything in Docker:
+
 ```bash
 # Development
 docker-compose up -d
@@ -212,6 +288,52 @@ docker-compose -f docker-compose.yml -f docker-compose.windows.yml up -d
 # Production
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
+
+### Hybrid Setup: MongoDB in Docker, App Locally (Recommended for Development)
+
+This setup gives you the benefits of Docker for MongoDB while running the Node.js app locally for easier debugging and faster development:
+
+1. **Start only MongoDB in Docker:**
+   ```bash
+   # Start MongoDB container
+   docker-compose up -d db
+   
+   # Verify MongoDB is running
+   docker-compose ps
+   ```
+
+2. **Configure local environment:**
+   ```bash
+   # Copy the example local config (if not already done)
+   cp server/config/env/local.example.js server/config/env/local.js
+   ```
+
+3. **The server will automatically connect to MongoDB at `mongodb://localhost:27017/harpi-dev`** (this is the default in development mode)
+
+4. **Run the application locally:**
+   ```bash
+   # Start both client and server
+   npm run dev
+   
+   # Or start them separately
+   npm run dev:server  # Server on http://localhost:3001
+   npm run dev:client  # Client on http://localhost:3000
+   ```
+
+5. **Stop MongoDB when done:**
+   ```bash
+   docker-compose stop db
+   # Or to remove the container (data persists in ./data/db)
+   docker-compose down
+   ```
+
+**Benefits of this approach:**
+- ✅ No need to install MongoDB locally
+- ✅ MongoDB data persists in `./data/db` directory
+- ✅ Easy to reset database (just delete `./data/db`)
+- ✅ Full debugging capabilities for Node.js code
+- ✅ Faster development cycle (no Docker rebuild needed)
+- ✅ Hot reload works perfectly
 
 ## 🤝 Contributing
 

@@ -156,3 +156,6 @@ server/dist/
 uploads/
 modules/users/client/img/profile/uploads/
 modules/projects/client/uploads/
+
+# Database files
+data/db/

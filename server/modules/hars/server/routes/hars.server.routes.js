@@ -22,7 +22,7 @@ module.exports = function (app) {
   app.route('/api/hars/:harId/specs').all(harsPolicy.isAllowed)
         .post(hars.createSwagger);
 
-    //Test PlantUML
+    //Mermaid UML diagram generation
   app.route('/api/hars/:harId/puml').all(harsPolicy.isAllowed)
         .get(hars.readUML)
         .post(hars.createUML);

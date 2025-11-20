@@ -27,7 +27,21 @@
         vm.harText = JSON.stringify(har.log, null, 2);
         vm.closeModal = closeErrorModal;
 
-        if (vm.har.puml) showUml();
+        // Watch for mermaid changes and render
+        $scope.$watch('vm.har.mermaid', function(newVal) {
+          if (newVal) {
+            $timeout(function() {
+              renderMermaid();
+            }, 300);
+          }
+        });
+        
+        // Initialize Mermaid rendering if diagram exists
+        if (vm.har.mermaid) {
+          $timeout(function() {
+            renderMermaid();
+          }, 300);
+        }
 
         $scope.schema = {
             type: "object",
@@ -141,12 +155,17 @@
             }
         }
 
-        // Convert existing Har to UML Class Diagram
+        // Convert existing Har to UML Sequence Diagram (Mermaid)
         function plantify() {
             vm.har.$plantify({}, successCallback, errorCallback);
 
             function successCallback(res) {
-                showUml();
+                // Update the har object with the response
+                vm.har = res;
+                // Render Mermaid diagram
+                $timeout(function() {
+                    renderMermaid();
+                }, 100);
             }
 
             function errorCallback(res) {
@@ -154,12 +173,36 @@
             }
         }
 
-        // load up the umlImageUrl with timestamp to force a refresh of the binding.
-        function showUml() {
-            //TODO get this right!
-            $timeout(function () {
-                $scope.umlImageUrl = "/api/hars/" + vm.har._id + "/puml" + "?" + new Date().getTime();
-            });
+        // Render Mermaid diagram
+        function renderMermaid() {
+            if (typeof mermaid !== 'undefined' && vm.har.mermaid) {
+                var diagramElement = document.getElementById('mermaid-diagram-' + vm.har._id);
+                if (diagramElement && vm.har.mermaid) {
+                    try {
+                        // Check if already rendered (has SVG child)
+                        var existingSvg = diagramElement.querySelector('svg');
+                        if (existingSvg) {
+                            existingSvg.remove(); // Remove old rendering
+                        }
+                        
+                        // Set the Mermaid text
+                        diagramElement.textContent = vm.har.mermaid;
+                        
+                        // Trigger Mermaid to render (for dynamically added content)
+                        // Mermaid v10 will auto-render elements with class 'mermaid' when contentLoaded is called
+                        if (mermaid.contentLoaded) {
+                            mermaid.contentLoaded();
+                        } else if (mermaid.run) {
+                            // Alternative API for Mermaid v10
+                            mermaid.run({
+                                nodes: [diagramElement]
+                            });
+                        }
+                    } catch (err) {
+                        console.error('Error rendering Mermaid diagram:', err);
+                    }
+                }
+            }
         }
 
         // Save Har

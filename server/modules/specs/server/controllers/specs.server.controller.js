@@ -17,19 +17,17 @@ var path = require('path'),
  * body.title
  * body.log
  */
-exports.create = function(req, res) {
-    var spec = new Spec(req.body);
-    spec.user = req.user;
-
-    spec.save(function(err) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.json(spec);
-        }
-    });
+exports.create = async function(req, res) {
+    try {
+        var spec = new Spec(req.body);
+        spec.user = req.user;
+        await spec.save();
+        res.json(spec);
+    } catch (err) {
+        return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
 /**
@@ -89,74 +87,68 @@ exports.testSwagger = function(req, res) {
 /**
  * Update a Spec
  */
-exports.update = function(req, res) {
-    var spec = req.spec;
-
-    spec = _.extend(spec, req.body);
-
-    spec.save(function(err) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessageNew(err)
-            });
-        } else {
-            res.jsonp(spec);
-        }
-    });
+exports.update = async function(req, res) {
+    try {
+        var spec = req.spec;
+        spec = _.extend(spec, req.body);
+        await spec.save();
+        res.jsonp(spec);
+    } catch (err) {
+        return res.status(400).send({
+            message: errorHandler.getErrorMessageNew(err)
+        });
+    }
 };
 
 /**
  * Delete an Spec
  */
-exports.delete = function(req, res) {
-    var spec = req.spec;
-
-    spec.remove(function(err) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.jsonp(spec);
-        }
-    });
+exports.delete = async function(req, res) {
+    try {
+        var spec = req.spec;
+        await spec.deleteOne();
+        res.jsonp(spec);
+    } catch (err) {
+        return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
 /**
  * List of Specs
  */
-exports.list = function(req, res) {
-    Spec.find().sort('-created').populate('user', 'displayName').exec(function(err, specs) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.jsonp(specs);
-        }
-    });
+exports.list = async function(req, res) {
+    try {
+        const specs = await Spec.find().sort('-created').populate('user', 'displayName').exec();
+        res.jsonp(specs);
+    } catch (err) {
+        return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
 /**
  * Spec middleware
  */
-exports.specByID = function(req, res, next, id) {
-
+exports.specByID = async function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send({
             message: 'Spec is invalid'
         });
     }
 
-    Spec.findById(id).populate('user', 'displayName').exec(function(err, spec) {
-        if (err) {
-            return next(err);
-        } else if (!spec) {
+    try {
+        const spec = await Spec.findById(id).populate('user', 'displayName').exec();
+        if (!spec) {
             return res.status(404).send({
                 message: 'No Spec with that identifier has been found'
             });
         }
         req.spec = spec;
         next();
-    });
+    } catch (err) {
+        return next(err);
+    }
 };

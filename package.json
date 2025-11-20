@@ -10,7 +10,7 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "install:all": "npm install && cd server && npm install --ignore-scripts && cd ../client && npm install",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",

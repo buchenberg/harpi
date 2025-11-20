@@ -209,9 +209,23 @@ module.exports.initErrorRoutes = function(app) {
     }
 
     // Log it
-    console.error(err.stack);
+    console.error('Unhandled error:', err);
+    console.error('Error stack:', err.stack);
+    console.error('Request path:', req.path);
+    console.error('Request method:', req.method);
 
-    // Redirect to error page
+    // If this is an API request, return JSON error
+    if (req.path && req.path.startsWith('/api')) {
+      return res.status(err.status || 500).json({
+        message: err.message || 'Internal server error',
+        error: process.env.NODE_ENV === 'development' ? {
+          message: err.message,
+          stack: err.stack
+        } : undefined
+      });
+    }
+
+    // For non-API requests, redirect to error page
     res.redirect('/server-error');
   });
 };

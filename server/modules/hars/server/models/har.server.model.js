@@ -25,6 +25,9 @@ var HarSchema = new Schema({
   puml: {
     type: String
   },
+  mermaid: {
+    type: String
+  },
   specs: [{
     type: Schema.ObjectId,
     ref: 'Spec'
