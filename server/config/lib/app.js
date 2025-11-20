@@ -65,6 +65,7 @@ module.exports.start = async function start(callback) {
         console.log('--');
         console.log(chalk.bold.green('✓ Server is running and ready to accept connections'));
         console.log(chalk.gray('  Access the API at: ' + chalk.cyan(serverUrl + '/api')));
+        console.log(chalk.gray('  View Swagger docs at: ' + chalk.cyan(serverUrl + '/swagger')));
         console.log('--');
 
         // Pass server, db, and config to the callback

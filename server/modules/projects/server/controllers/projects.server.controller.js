@@ -9,6 +9,8 @@ var path = require('path'),
   config = require(path.resolve('./config/config')),
   Project = mongoose.model('Project'),
   Har = mongoose.model('Har'),
+  Spec = mongoose.model('Spec'),
+  Diagram = mongoose.model('Diagram'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -30,8 +32,27 @@ exports.create = async function (req, res) {
 /**
  * Show the current project
  */
-exports.read = function (req, res) {
-  res.json(req.project);
+exports.read = async function (req, res) {
+  try {
+    const project = await Project.findById(req.project._id)
+      .populate('hars', 'name created')
+      .populate('user', 'displayName')
+      .exec();
+    
+    // Get specs and diagrams for this project
+    const specs = await Spec.find({ project: project._id }).exec();
+    const diagrams = await Diagram.find({ project: project._id }).exec();
+    
+    const projectObj = project.toObject();
+    projectObj.specs = specs;
+    projectObj.diagrams = diagrams;
+    
+    res.json(projectObj);
+  } catch (err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  }
 };
 
 /**
@@ -72,11 +93,21 @@ exports.delete = async function (req, res) {
 exports.list = async function (req, res) {
   try {
     const projects = await Project.find().sort('-created')
-      .populate({
-        path: 'hars.name',
-        model: 'Har'
-      }).exec();
-    res.json(projects);
+      .populate('user', 'displayName')
+      .populate('hars', 'name')
+      .exec();
+    
+    // Add counts for specs and diagrams for each project
+    const projectsWithCounts = await Promise.all(projects.map(async (project) => {
+      const projectObj = project.toObject();
+      const specCount = await Spec.countDocuments({ project: project._id }).exec();
+      const diagramCount = await Diagram.countDocuments({ project: project._id }).exec();
+      projectObj.specsCount = specCount;
+      projectObj.diagramsCount = diagramCount;
+      return projectObj;
+    }));
+    
+    res.json(projectsWithCounts);
   } catch (err) {
     return res.status(400).send({
       message: errorHandler.getErrorMessage(err)

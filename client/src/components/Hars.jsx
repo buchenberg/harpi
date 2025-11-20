@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Button, Row, Col, Badge, Alert, Table, Modal } from 'react-bootstrap'
+import { Card, Button, Row, Col, Badge, Alert, Table, Modal, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Hars() {
   const [hars, setHars] = useState([])
+  const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedHar, setSelectedHar] = useState(null)
   const [showViewModal, setShowViewModal] = useState(false)
+  const [showProjectModal, setShowProjectModal] = useState(false)
+  const [selectedProject, setSelectedProject] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     fetchHars()
+    fetchProjects()
   }, [])
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get('/api/projects')
+      setProjects(response.data)
+    } catch (err) {
+      console.error('Error fetching projects:', err)
+    }
+  }
 
   const fetchHars = async () => {
     try {
@@ -78,7 +91,25 @@ function Hars() {
     }
   }
 
-  const handleFileUpload = async (event) => {
+  const handleGenerateDiagram = async (harId) => {
+    try {
+      setError(null)
+      setLoading(true)
+      const response = await axios.post(`/api/hars/${harId}/diagrams`)
+      
+      setSuccessMessage('Diagram generated successfully')
+      setTimeout(() => setSuccessMessage(null), 3000)
+      // Navigate to diagrams page
+      navigate('/diagrams')
+    } catch (err) {
+      console.error('Error generating diagram:', err)
+      setError(err.response?.data?.message || 'Failed to generate diagram')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleFileSelect = (event) => {
     const file = event.target.files[0]
     if (!file) return
 
@@ -88,9 +119,37 @@ function Hars() {
       return
     }
 
+    // Check if projects exist
+    if (projects.length === 0) {
+      setError('Please create a project first before uploading HAR files')
+      return
+    }
+
+    // Show project selection modal
+    setSelectedProject('')
+    setShowProjectModal(true)
+    // Store the file for later upload
+    event.target.file = file
+  }
+
+  const handleFileUpload = async () => {
+    if (!selectedProject) {
+      setError('Please select a project')
+      return
+    }
+
+    // Get the file from the input
+    const fileInput = document.getElementById('file-upload')
+    const file = fileInput?.files?.[0]
+    if (!file) {
+      setError('No file selected')
+      return
+    }
+
     try {
       setLoading(true)
       setError(null)
+      setShowProjectModal(false)
 
       // Read file as text
       const fileText = await file.text()
@@ -106,7 +165,8 @@ function Hars() {
       // Create HAR object with the parsed data
       const harPayload = {
         name: file.name.replace('.har', ''),
-        log: harData.log
+        log: harData.log,
+        project: selectedProject
       }
 
       // Upload to server
@@ -116,7 +176,12 @@ function Hars() {
       await fetchHars()
       
       // Reset file input
-      event.target.value = ''
+      if (fileInput) {
+        fileInput.value = ''
+      }
+      
+      setSuccessMessage('HAR file uploaded successfully')
+      setTimeout(() => setSuccessMessage(null), 3000)
       
       console.log('HAR file uploaded successfully:', response.data)
     } catch (err) {
@@ -159,7 +224,7 @@ function Hars() {
           <input
             type="file"
             accept=".har"
-            onChange={handleFileUpload}
+            onChange={handleFileSelect}
             style={{ display: 'none' }}
             id="file-upload"
           />
@@ -199,7 +264,7 @@ function Hars() {
                     <td>{har.name}</td>
                     <td>
                       <Badge bg="secondary">
-                        {har.project?.name || 'No Project'}
+                        {har.project?.title || 'No Project'}
                       </Badge>
                     </td>
                     <td>{har.size ? `${(har.size / 1024).toFixed(1)} KB` : 'N/A'}</td>
@@ -228,6 +293,15 @@ function Hars() {
                         disabled={loading}
                       >
                         Generate Spec
+                      </Button>
+                      <Button 
+                        variant="outline-info" 
+                        size="sm" 
+                        className="me-2"
+                        onClick={() => handleGenerateDiagram(har._id)}
+                        disabled={loading}
+                      >
+                        Generate Diagram
                       </Button>
                       <Button 
                         variant="outline-danger" 
@@ -305,6 +379,60 @@ function Hars() {
           <Button variant="secondary" onClick={() => setShowViewModal(false)}>
             Close
           </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Project Selection Modal */}
+      <Modal show={showProjectModal} onHide={() => setShowProjectModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {projects.length === 0 ? (
+            <Alert variant="warning">
+              <p>No projects found. Please create a project first.</p>
+              <Button variant="primary" onClick={() => {
+                setShowProjectModal(false)
+                navigate('/projects')
+              }}>
+                Create Project
+              </Button>
+            </Alert>
+          ) : (
+            <div>
+              <p>Please select a project for this HAR file:</p>
+              <Form.Select
+                value={selectedProject}
+                onChange={(e) => setSelectedProject(e.target.value)}
+                required
+              >
+                <option value="">-- Select a project --</option>
+                {projects.map((project) => (
+                  <option key={project._id} value={project._id}>
+                    {project.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => {
+            setShowProjectModal(false)
+            const fileInput = document.getElementById('file-upload')
+            if (fileInput) fileInput.value = ''
+          }}>
+            Cancel
+          </Button>
+          {projects.length > 0 && (
+            <Button 
+              variant="primary" 
+              onClick={handleFileUpload}
+              disabled={!selectedProject || loading}
+            >
+              {loading ? 'Uploading...' : 'Upload'}
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </div>

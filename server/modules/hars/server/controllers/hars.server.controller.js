@@ -8,8 +8,10 @@ var path = require('path'),
   http = require('http'),
   Har = mongoose.model('Har'),
   Spec = mongoose.model('Spec'),
+  Diagram = mongoose.model('Diagram'),
+  Project = mongoose.model('Project'),
   h2s = require('har-to-swagger'),
-  url = require('url'),
+  h2m = require('har-to-mermaid'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -18,6 +20,13 @@ var path = require('path'),
  */
 exports.create = async function (req, res) {
   try {
+    // Validate project is provided
+    if (!req.body.project) {
+      return res.status(400).send({
+        message: 'Project is required'
+      });
+    }
+
     // Ensure the log field is properly serialized (handles any edge cases)
     var harData = req.body;
     if (harData.log && typeof harData.log === 'object') {
@@ -27,6 +36,19 @@ exports.create = async function (req, res) {
     var har = new Har(harData);
     har.user = req.user;
     await har.save();
+
+    // Add HAR to project's hars array
+    var project = await Project.findById(req.body.project).exec();
+    if (project) {
+      if (!project.hars) {
+        project.hars = [];
+      }
+      if (project.hars.indexOf(har._id) === -1) {
+        project.hars.push(har._id);
+        await project.save();
+      }
+    }
+
     res.jsonp(har);
   } catch (err) {
     return res.status(400).send({
@@ -129,7 +151,10 @@ exports.list = async function (req, res) {
     console.log('[HARs Controller] Starting Har.find() query');
     
     // Mongoose 8.x no longer supports callbacks - use async/await
-    const hars = await Har.find().sort('-created').populate('user', 'displayName').exec();
+    const hars = await Har.find().sort('-created')
+      .populate('user', 'displayName')
+      .populate('project', 'title')
+      .exec();
     
     console.log('[HARs Controller] Found', hars ? hars.length : 0, 'HARs');
     // Return empty array if no HARs found, or the list of HARs
@@ -233,9 +258,14 @@ exports.createSwagger = async function (req, res) {
     spec.user = req.user;
     spec.title = har.name;
     spec.swagger = result.swagger;
+    spec.har = har._id;
+    spec.project = har.project;
     await spec.save();
 
     // Add spec to har and save
+    if (!har.specs) {
+      har.specs = [];
+    }
     har.specs.push(spec._id);
     await har.save();
 
@@ -274,128 +304,100 @@ exports.readUML = function (req, res) {
 exports.createUML = async function (req, res) {
   try {
     var har = req.har;
-    var log = har.log;
     
-    // Generate Mermaid text synchronously (it's a simple string builder)
-    var mermaidText = '';
-    mermaidify(log, function (text) {
-      mermaidText = text;
-    });
+    // Validate that har.log exists
+    if (!har.log || !har.log.entries || !Array.isArray(har.log.entries)) {
+      return res.status(400).send({
+        message: 'HAR file does not contain a valid log with entries'
+      });
+    }
     
+    // Convert Mongoose document to plain JavaScript object
+    var harObj = har.toObject ? har.toObject() : har;
+    var log = harObj.log;
+    
+    // Generate Mermaid text using the library
+    var mermaidText = h2m.generate(log);
+    
+    // Save to HAR document (for backward compatibility)
     har.mermaid = mermaidText;
-    // Keep puml field for backward compatibility during migration
-    // har.puml = null; // Can be removed later
     await har.save();
-    res.jsonp(har);
+    
+    // Also create a Diagram document in the collection
+    var diagram = new Diagram({
+      title: har.name || 'HAR Diagram',
+      description: 'Generated from HAR file: ' + (har.name || 'Untitled'),
+      mermaid: mermaidText,
+      har: har._id,
+      project: har.project,
+      user: req.user
+    });
+    await diagram.save();
+
+    // Add diagram to har's diagrams array
+    if (!har.diagrams) {
+      har.diagrams = [];
+    }
+    har.diagrams.push(diagram._id);
+    await har.save();
+    
+    res.jsonp({
+      har: har,
+      diagram: diagram
+    });
   } catch (err) {
+    console.error('Error generating Mermaid diagram:', err);
     return res.status(400).send({
       message: errorHandler.getErrorMessage(err)
     });
   }
 };
 
-function mermaidify(log, callback) {
-  var mermaidText = 'sequenceDiagram\n';
-  mermaidText += '    participant UA as "User Agent"\n';
-  
-  // Collect unique services first
-  var services = [];
-  var serviceMap = {};
-  var serviceIndex = 0;
-  
-  for (var entry in log.entries) {
-    if (log.entries.hasOwnProperty(entry)) {
-      var requestUrlObj = url.parse(log.entries[entry].request.url);
-      var serviceName = log.entries[entry]['x-service-name'] || 
-                       requestUrlObj.hostname || 
-                       requestUrlObj.pathname || 
-                       'Service';
-      
-      // Normalize service name
-      serviceName = serviceName.replace(/^\/+|\/+$/g, ''); // Remove leading/trailing slashes
-      if (!serviceName) serviceName = 'Service';
-      
-      if (!serviceMap[serviceName]) {
-        serviceMap[serviceName] = 'S' + serviceIndex;
-        services.push({ name: serviceName, id: 'S' + serviceIndex });
-        mermaidText += '    participant S' + serviceIndex + ' as "' + serviceName + '"\n';
-        serviceIndex++;
-      }
+/**
+ * Create a diagram from HAR (saves to diagrams collection)
+ */
+exports.createDiagram = async function (req, res) {
+  try {
+    var har = req.har;
+    
+    // Validate that har.log exists
+    if (!har.log || !har.log.entries || !Array.isArray(har.log.entries)) {
+      return res.status(400).send({
+        message: 'HAR file does not contain a valid log with entries'
+      });
     }
-  }
-  
-  mermaidText += '\n';
-  
-  // Generate sequence
-  for (var entry in log.entries) {
-    if (log.entries.hasOwnProperty(entry)) {
-      var requestUrlObj = url.parse(log.entries[entry].request.url);
-      var serviceName = log.entries[entry]['x-service-name'] || 
-                       requestUrlObj.hostname || 
-                       requestUrlObj.pathname || 
-                       'Service';
-      
-      // Normalize service name
-      serviceName = serviceName.replace(/^\/+|\/+$/g, '');
-      if (!serviceName) serviceName = 'Service';
-      
-      var serviceId = serviceMap[serviceName] || 'S0';
-      var resourceName = log.entries[entry]['x-resource-name'] || 
-                        requestUrlObj.pathname.split("/").pop() || 
-                        'resource';
-      var method = log.entries[entry].request.method.toLowerCase();
-      var resStatus = log.entries[entry].response.status;
-      
-      var resStatusText;
-      switch (log.entries[entry].response.status) {
-        case 200:
-          resStatusText = '';
-          break;
-        default:
-          resStatusText = ' ' + (log.entries[entry].response.statusText || '');
-          break;
-      }
+    
+    // Convert Mongoose document to plain JavaScript object
+    var harObj = har.toObject ? har.toObject() : har;
+    var log = harObj.log;
+    
+    // Generate Mermaid text using the library
+    var mermaidText = h2m.generate(log);
+    
+    // Create a Diagram document in the collection
+    var diagram = new Diagram({
+      title: har.name || 'HAR Diagram',
+      description: 'Generated from HAR file: ' + (har.name || 'Untitled'),
+      mermaid: mermaidText,
+      har: har._id,
+      project: har.project,
+      user: req.user
+    });
+    await diagram.save();
 
-      // Query params
-      var queryParams = '';
-      if (log.entries[entry].request.queryString) {
-        for (var qParam in log.entries[entry].request.queryString) {
-          if (log.entries[entry].request.queryString.hasOwnProperty(qParam)) {
-            queryParams += log.entries[entry].request.queryString[qParam].name + ', ';
-          }
-        }
-      }
-      
-      // Path params
-      var pathParams = '';
-      if (log.entries[entry].request['x-path-params']) {
-        for (var pParam in log.entries[entry].request['x-path-params']) {
-          if (log.entries[entry].request['x-path-params'].hasOwnProperty(pParam)) {
-            pathParams += log.entries[entry].request['x-path-params'][pParam].name + ', ';
-          }
-        }
-      }
-
-      var allParams = (queryParams + pathParams).replace(/,\s*$/, '');
-      var methodName = method + resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
-      var paramsStr = allParams ? '(' + allParams + ')' : '()';
-      
-      // Request message
-      mermaidText += '    UA->>' + serviceId + ': ' + methodName + paramsStr + '\n';
-      
-      // Note
-      if (requestUrlObj.pathname) {
-        mermaidText += '    Note right of ' + serviceId + ': ' + requestUrlObj.pathname + '\n';
-      }
-      
-      // Response message
-      mermaidText += '    ' + serviceId + '-->>UA: ' + resStatus + '(' + resourceName + resStatusText + ')\n';
+    // Add diagram to har's diagrams array
+    if (!har.diagrams) {
+      har.diagrams = [];
     }
+    har.diagrams.push(diagram._id);
+    await har.save();
+    
+    res.jsonp(diagram);
+  } catch (err) {
+    console.error('Error creating diagram:', err);
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
   }
-  
-  // Make sure the callback is a function
-  if (typeof callback === 'function') {
-    callback(mermaidText);
-  }
-}
+};
 

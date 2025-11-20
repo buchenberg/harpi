@@ -199,6 +199,14 @@ module.exports.initModulesServerRoutes = function(app) {
 };
 
 /**
+ * Initialize Swagger documentation
+ */
+module.exports.initSwagger = function(app) {
+  var swagger = require('./swagger');
+  swagger.setup(app);
+};
+
+/**
  * Configure error handling
  */
 module.exports.initErrorRoutes = function(app) {
@@ -274,6 +282,9 @@ module.exports.init = function(db) {
 
   // Initialize modules server routes
   this.initModulesServerRoutes(app);
+
+  // Initialize Swagger documentation
+  this.initSwagger(app);
 
   // Initialize error routes
   this.initErrorRoutes(app);

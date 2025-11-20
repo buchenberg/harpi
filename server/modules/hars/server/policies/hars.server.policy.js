@@ -50,6 +50,9 @@ exports.invokeRolesPolicies = function () {
                 }, {
                     resources: '/api/hars/:harId/specs',
                     permissions: ['get', 'post']
+                }, {
+                    resources: '/api/hars/:harId/diagrams',
+                    permissions: ['get', 'post']
                 }]
         }]);
 };

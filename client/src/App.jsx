@@ -5,6 +5,7 @@ import Home from './components/Home'
 import Projects from './components/Projects'
 import Hars from './components/Hars'
 import Specs from './components/Specs'
+import Diagrams from './components/Diagrams'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Nav.Link href="/projects">Projects</Nav.Link>
               <Nav.Link href="/hars">HAR Files</Nav.Link>
               <Nav.Link href="/specs">Specs</Nav.Link>
+              <Nav.Link href="/diagrams">Diagrams</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -31,6 +33,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/hars" element={<Hars />} />
           <Route path="/specs" element={<Specs />} />
+          <Route path="/diagrams" element={<Diagrams />} />
         </Routes>
       </Container>
     </div>

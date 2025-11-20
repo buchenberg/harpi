@@ -37,6 +37,7 @@
     "forever": "^4.0.3",
     "generate-password": "^1.7.0",
     "glob": "^10.3.10",
+    "har-to-mermaid": "file:../../har-to-mermaid",
     "har-to-swagger": "file:../../har-to-swagger",
     "helmet": "^7.1.0",
     "jsoniq": "^0.0.8",
@@ -58,6 +59,8 @@
     "passport-twitter": "^1.0.4",
     "serve-favicon": "^2.5.0",
     "socket.io": "^4.7.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "swig": "^1.4.2",
     "validator": "^13.11.0"
   },

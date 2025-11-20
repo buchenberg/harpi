@@ -37,7 +37,7 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }, {
       resources: '/api/specs/:specId',
-      permissions: ['get']
+      permissions: ['get', 'delete']
     }]
   }]);
 };

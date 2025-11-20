@@ -32,6 +32,15 @@ var HarSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Spec'
   }],
+  diagrams: [{
+    type: Schema.ObjectId,
+    ref: 'Diagram'
+  }],
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project',
+    required: 'Project is required'
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

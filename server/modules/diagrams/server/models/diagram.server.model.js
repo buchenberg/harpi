@@ -1,4 +1,4 @@
-/*'use strict';
+'use strict';
 
 /**
  * Module dependencies.
@@ -6,12 +6,10 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-
 /**
- * Project Schema
+ * Diagram Schema
  */
-
-var SpecSchema = new Schema({
+var DiagramSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
@@ -27,7 +25,10 @@ var SpecSchema = new Schema({
     default: '',
     trim: true
   },
-  swagger: {
+  mermaid: {
+    type: String,
+    default: '',
+    required: 'Mermaid diagram text is required'
   },
   har: {
     type: Schema.ObjectId,
@@ -43,4 +44,5 @@ var SpecSchema = new Schema({
   }
 }, { strict: false });
 
-mongoose.model('Spec', SpecSchema);
+mongoose.model('Diagram', DiagramSchema);
+
