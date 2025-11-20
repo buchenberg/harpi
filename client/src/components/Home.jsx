@@ -1,16 +1,25 @@
 import React from 'react'
 import { Card, Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 function Home() {
   return (
     <div>
-      <div className="text-center mb-5">
-        <h1 className="display-4">Welcome to Harpi</h1>
-        <p className="lead text-muted">
-          HTTP Archive Pipeline - Transform your HAR files into API specifications
-        </p>
-      </div>
+      <Card className="mb-5 border-0 shadow-sm">
+        <Card.Body className="text-center py-5">
+          <img 
+            src={logo} 
+            alt="Harpi Logo" 
+            className="mb-4"
+            style={{ maxWidth: '300px', height: 'auto' }}
+          />
+          <h1 className="display-4">Welcome to Harpi</h1>
+          <p className="lead text-muted">
+            HTTP Archive Pipeline - Transform your HAR files into API specifications and Mermaid sequence diagrams
+          </p>
+        </Card.Body>
+      </Card>
 
       <Row className="g-4">
         <Col md={6} lg={3}>
@@ -70,8 +79,8 @@ function Home() {
               <Card.Text>
                 Generate UML diagrams from your HAR files
               </Card.Text>
-              <Button variant="outline-primary" disabled>
-                Coming Soon
+              <Button as={Link} to="/diagrams" variant="primary">
+                View Diagrams
               </Button>
             </Card.Body>
           </Card>
@@ -86,9 +95,10 @@ function Home() {
           <Card.Body>
             <ol>
               <li>Create a new project to organize your work</li>
-              <li>Upload HAR files from your browser's developer tools</li>
-              <li>Generate API specifications automatically</li>
-              <li>Export specifications in various formats</li>
+              <li>Upload HAR files from your browser's developer tools (you'll need to select a project when uploading)</li>
+              <li>Generate API specifications or Mermaid sequence diagrams from your HAR files</li>
+              <li>View, export, or test your specifications using the interactive Swagger UI</li>
+              <li>View and export your Mermaid diagrams</li>
             </ol>
           </Card.Body>
         </Card>

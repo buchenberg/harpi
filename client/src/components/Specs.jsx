@@ -165,6 +165,15 @@ function Specs() {
                         View
                       </Button>
                       <Button 
+                        variant="outline-info" 
+                        size="sm" 
+                        className="me-2"
+                        onClick={() => window.open(`/swagger/view/${spec._id}`, '_blank')}
+                        title="View in Swagger UI"
+                      >
+                        Swagger UI
+                      </Button>
+                      <Button 
                         variant="outline-success" 
                         size="sm" 
                         className="me-2"

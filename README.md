@@ -236,7 +236,8 @@ cd client && npm run test:coverage
 - ✅ Generate distinct URL reports on project HAR files
 - ✅ Generate Swagger from HAR files
 - ✅ Generate UML sequence diagrams from HAR files
-- ✅ Show Swagger specs in included Swagger UI
+- ✅ View Swagger specs in interactive Swagger UI
+- ✅ API documentation with Swagger UI
 - ✅ User authentication and management
 - ✅ Real-time updates with Socket.io
 
@@ -269,6 +270,45 @@ cd client && npm run test:coverage
 | POST | `/api/specs` | Create spec |
 | PUT | `/api/specs/{specId}` | Update spec by id |
 | DELETE | `/api/specs/{specId}` | Delete spec by id |
+| GET | `/api/specs/{specId}/swagger` | Get Swagger JSON for a spec |
+| GET | `/api/diagrams/{diagramId}` | Get diagram by id |
+| GET | `/api/diagrams` | List diagrams |
+| POST | `/api/diagrams` | Create diagram |
+| POST | `/api/hars/{harId}/diagrams` | Generate diagram from HAR |
+| GET | `/swagger` | View API documentation in Swagger UI |
+| GET | `/swagger.json` | Get API documentation as JSON |
+| GET | `/swagger/view/{specId}` | View generated spec in Swagger UI |
+
+## 📚 API Documentation
+
+Harpi includes interactive API documentation powered by Swagger UI:
+
+### Viewing API Documentation
+
+1. **Main API Documentation**
+   - Access the interactive API documentation at: `http://localhost:3000/swagger`
+   - Or via the client proxy: `http://localhost:3001/swagger`
+   - This shows all available API endpoints with request/response schemas
+   - You can test endpoints directly from the Swagger UI
+
+2. **Viewing Generated Swagger Specs**
+   - After generating a Swagger spec from a HAR file, click the "Swagger UI" button in the Specs list
+   - Or navigate directly to: `http://localhost:3000/swagger/view/{specId}`
+   - This opens the generated spec in an interactive Swagger UI where you can:
+     - Browse all endpoints from the HAR file
+     - View request/response schemas
+     - Test endpoints directly
+     - See the complete OpenAPI specification
+
+3. **Swagger JSON Endpoints**
+   - Get the API documentation JSON: `http://localhost:3000/swagger.json`
+   - Get a specific spec's Swagger JSON: `http://localhost:3000/api/specs/{specId}/swagger`
+
+The Swagger UI provides:
+- Interactive API exploration
+- Try-it-out functionality for testing endpoints
+- Request/response schema documentation
+- Organized endpoint grouping by tags
 
 ## 🐳 Docker Support
 

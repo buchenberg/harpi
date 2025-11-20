@@ -225,13 +225,89 @@ var swaggerSpec = swaggerJsdoc(swaggerOptions);
  * Setup Swagger UI
  */
 module.exports.setup = function(app) {
+  var mongoose = require('mongoose');
+  var Spec = mongoose.model('Spec');
+
   // Swagger JSON endpoint
   app.get('/swagger.json', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });
 
-  // Swagger UI endpoint
+  // Swagger JSON endpoint for a specific spec (used by Swagger UI)
+  // This must come before the /swagger route to avoid conflicts
+  app.get('/swagger/spec/:specId.json', async function(req, res, next) {
+    try {
+      var spec = await Spec.findById(req.params.specId).exec();
+      
+      if (!spec) {
+        return res.status(404).json({ error: 'Spec not found' });
+      }
+
+      if (!spec.swagger) {
+        return res.status(400).json({ error: 'Spec does not contain Swagger JSON' });
+      }
+
+      // Parse the swagger JSON if it's a string, otherwise return as-is
+      var specSwagger = typeof spec.swagger === 'string' 
+        ? JSON.parse(spec.swagger) 
+        : spec.swagger;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.json(specSwagger);
+    } catch (err) {
+      console.error('Error loading spec for Swagger UI:', err);
+      return res.status(500).json({ error: 'Error loading spec: ' + err.message });
+    }
+  });
+
+  // Serve Swagger UI static assets for /swagger/view/ paths
+  // This must come BEFORE the :specId route to catch static asset requests
+  app.use('/swagger/view', swaggerUi.serve);
+
+  // Swagger UI endpoint for viewing generated specs
+  // This route serves Swagger UI with a specific spec's swagger JSON
+  // This must come before the /swagger route to avoid conflicts
+  // Use generateHTML to embed everything and avoid static asset path issues
+  app.get('/swagger/view/:specId', async function(req, res, next) {
+    try {
+      var spec = await Spec.findById(req.params.specId).exec();
+      
+      if (!spec) {
+        return res.status(404).send('Spec not found');
+      }
+
+      if (!spec.swagger) {
+        return res.status(400).send('Spec does not contain Swagger JSON');
+      }
+
+      // Parse the swagger JSON if it's a string
+      var specSwagger = typeof spec.swagger === 'string' 
+        ? JSON.parse(spec.swagger) 
+        : spec.swagger;
+
+      // Use generateHTML to create the Swagger UI HTML with the spec embedded
+      // This avoids static asset path issues
+      var html = swaggerUi.generateHTML(specSwagger, {
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: 'Swagger Spec: ' + (spec.title || 'Untitled'),
+        swaggerOptions: {
+          persistAuthorization: true,
+          displayRequestDuration: true,
+          filter: true,
+          tryItOutEnabled: true
+        }
+      });
+
+      res.send(html);
+    } catch (err) {
+      console.error('Error loading spec for Swagger UI:', err);
+      return res.status(500).send('Error loading spec: ' + err.message);
+    }
+  });
+
+  // Swagger UI endpoint for API documentation
+  // This comes last to avoid conflicts with more specific routes above
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customCss: '.swagger-ui .topbar { display: none }',
     customSiteTitle: 'HARPI API Documentation',
