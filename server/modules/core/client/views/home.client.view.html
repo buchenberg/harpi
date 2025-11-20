@@ -1,0 +1,18 @@
+<section ng-controller="HomeController">
+  <div class="jumbotron text-center">
+    <div class="row">
+      <h1><font color="red">H</font>ttp <font color="red">Ar</font>chive <font color="red">Pi</font>peline</h1>
+      <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+        <img alt="A Harpy" class="img-responsive" src="modules/core/client/img/brand/logo.png" />
+      </div>
+    </div>
+  </div>
+  <div>
+    <ul class="list-group">
+      <a class="list-group-item" ui-sref="projects.list">
+        <span class="badge">{{projects.length}}</span>
+        Active projects
+      </a>
+    </ul>
+  </div>
+</section>

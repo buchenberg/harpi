@@ -1,0 +1,185 @@
+<section>
+	<div class="page-header">
+		<h1>
+			<span data-ng-bind="vm.har.name"></span> Har!
+			<div class='btn-toolbar pull-right' ng-show="vm.har.isCurrentUserOwner">
+				<div class='btn-group'>
+					<a class="btn btn-primary" ui-sref="hars.edit({harId: vm.har._id})" uib-tooltip="edit">
+						<i class="glyphicon glyphicon-edit"></i>
+					</a>
+					<a class="btn btn-danger" ng-click="vm.remove()" uib-tooltip="delete">
+						<i class="glyphicon glyphicon-trash"></i>
+					</a>
+				</div>
+			</div>
+		</h1>
+
+	</div>
+	<div class="row-fluid">
+		<uib-tabset active="active">
+			<uib-tab index="0" heading="Edit">
+
+				<h2>It's log. It's log. It's log entries..</h2>
+
+				<div data-ng-repeat="entry in vm.har.log.entries">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">{{entry.request.method}} {{entry.request.url}}</h3>
+						</div>
+						<div class="panel-body">
+							<form name="vm.form.harEntriesForm{{$index}}" role="form" ng-submit="vm.save(true)" novalidate>
+								<!--<div class="form-group col-md-3 pull-left">
+									<img alt="Blackbeards head." class="img-responsive" src="modules/core/client/img/brand/blackbeards_head.png" />
+								</div>-->
+								<div class="row">
+									<div class="form-group col-lg-1 ">
+										<label class="control-label" for="entry_{{$index}}_service">Service Name</label>
+										<input name="name" type="text" ng-model="entry['x-service-name']" id="entry_{{$index}}_service" class="form-control" placeholder="e.g. 'Widgets Service'"
+											required>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-1 ">
+										<label class="control-label" for="entry_{{$index}}_resource">Resource Name</label>
+										<input name="name" type="text" ng-model="entry['x-resource-name']" id="entry_{{$index}}_resource" class="form-control" placeholder="What resource are you expecting with this {{entry.request.method}} request?"
+											required>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-1 ">
+										<button type="submit" class="btn btn-default">Update</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<!--<div class="col-md-12">
+					<form name="vm.form.harEntriesForm" class="form-horizontal" ng-submit="vm.save(true)" novalidate>
+						<fieldset>
+							<div data-ng-repeat="entry in vm.har.log.entries">
+								<h3>Entry {{$index}}</h3>
+								<hr class="separator">
+								<div class="form-group">
+									<label class="control-label">Url</label>
+									<div>
+										<p class="form-control-static">{{entry.request.url}}</p>
+									</div>
+								</div>
+								<div class="form-group" show-errors>
+									<label class="control-label" for="entry_{{$index}}_service">Service Name</label>
+									<input name="name" type="text" ng-model="entry['x-service-name']" id="entry_{{$index}}_service" class="form-control" placeholder="e.g. 'Widgets Service'"
+										required>
+								</div>
+								<div class="form-group" show-errors>
+									<label class="control-label" for="entry_{{$index}}_resource">Resource Name</label>
+									<input name="name" type="text" ng-model="entry['x-resource-name']" id="entry_{{$index}}_resource" class="form-control" placeholder="e.g. 'Widgets'"
+										required>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-default">Update</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>-->
+			</uib-tab>
+			<!--<uib-tab index="1" heading="Edit">
+				<h3>Hak yer Har</h3>
+				<div class="col-md-12">
+					<form name="vm.form.harForm" class="form-horizontal" ng-submit="vm.save(vm.form.harForm.$valid)" novalidate>
+						<fieldset>
+							<div class="form-group" show-errors>
+								<label class="control-label" for="har">HAR</label>
+								<div name="har" ui-ace="{ showGutter: true, theme:'monokai', mode: 'json', onLoad: aceLoaded, onChange: aceChanged }" ng-model="vm.harText">
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-default">{{vm.har._id ? 'Update' : 'Create'}}</button>
+							</div>
+							<div ng-show="vm.error" class="text-danger">
+								<strong ng-bind="vm.error"></strong>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</uib-tab>-->
+			<uib-tab index="2" heading="UML">
+				<p>
+					<div class="row-fluid">
+						<h3>UML Diagrams
+							<div class="pull-right">
+								<a class="btn btn-success" ng-click="vm.plantify()" uib-tooltip="Generate a sequence diagram">Generate</a>
+							</div>
+						</h3>
+
+						<h4>Sequence Diagram</h4>
+						<p>The sequence diagram can be used represent the communication flow between the User Agent (the browser client) and the
+							various services. The diagram is generated by parsing the Har JSON. The diagram may be augmented by adding metadata
+							to the Har file using the editor and clicking "Generate" again. The following sections describe the JSON elements
+							and how they are used.
+
+						</p>
+						<dl>
+							<dt>Participants</dt>
+							<dd>The first participant is always named 'User Agent'. All other participant names are derived from the path string in
+								the entries[*]request.url. The Optional entries[]['x-service-name'] metadata extension will be used if it exists.
+								A participant will be created for each entry where the names are different. If you have several entries for the same
+								service you may give each the same x-service-name and they will combine to one participant.</dd>
+							<dt>Messages</dt>
+							<dd>In UML sequence diagrams messages look like methods with signatures e.g. getResouceById(id) or respond(resource).
+								The UML request message names are generated using the entry request method and a resource name concatonated in Pascal
+								case like postWidget or getWidgets. The request method is dirived from entries[*].request.method and the resource
+								will be derived (guessed) from the last part of the path i.e /inventory/widgets becomes widgets. Optionaly, the x-resource-name
+								metadata extention can be added to the entry.</dd>
+						</dl>
+
+						<img ng-src="{{umlImageUrl}}">
+					</div>
+				</p>
+			</uib-tab>
+			<uib-tab index="3" heading="Swagger">
+				<h3>
+					OpenAPI (Swagger) Specifications
+					<div class="pull-right">
+						<a class="btn btn-success" ng-click="vm.swaggerfy()" uib-tooltip="Generate Swagger from Har">Generate</a>
+					</div>
+				</h3>
+				<div class="list-group">
+					<li data-ng-repeat="spec in vm.har.specs" class="list-group-item" data-ui-sref="specs.view({ specId: spec })">
+						<h4 class="list-group-item-heading" data-ng-bind="spec"></h4>
+					</li>
+				</div>
+			</uib-tab>
+			<!--<uib-tab index="4" heading="Sandbox">
+				<h3>Entries</h3>
+				<div>
+					<form data-sf-schema="schema" data-sf-form="form" data-sf-model="model"></form>
+				</div>
+				<p>
+					<div data-ng-repeat="entry in vm.har.log.entries">
+						<p><strong><span data-ng-bind="entry.startedDateTime" /></strong></p>
+						<p>Method: <span data-ng-bind="entry.request.method" /></p>
+						<p>URL: <span data-ng-bind="entry.request.url" /></p>
+					</div>
+				</p>
+
+			</uib-tab>-->
+		</uib-tabset>
+	</div>
+
+	<script type="text/ng-template" id="errorModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title" data-ng-bind="errorHeader"></h3>
+        </div>
+        <div class="modal-body" id="modal-body" data-ng-bind="errorText">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="vm.closeModal()">Close</button>
+        </div>
+    </script>
+
+
+
+</section>

@@ -1,0 +1,21 @@
+<section>
+  <div class="page-header">
+    <h1>Specifications</h1>
+  </div>
+  <div class="list-group">
+    <a data-ng-repeat="spec in vm.specs" data-ui-sref="specs.view({ specId: spec._id })" class="list-group-item">
+      <h3><span data-ng-bind="spec.title"></span></h3>
+      <small class="list-group-item-text">
+        Created on
+        <span data-ng-bind="spec.created | date:'mediumDate'"></span>
+        by
+        <span data-ng-if="spec.user" data-ng-bind="spec.user.displayName"></span>
+        <span data-ng-if="!spec.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" data-ng-bind="spec.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="vm.specs.$resolved && !vm.specs.length">
+    No Specs yet, why don't you <a data-ui-sref="specs.create">create one</a>?
+  </div>
+</section>

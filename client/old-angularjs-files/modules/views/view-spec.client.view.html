@@ -1,0 +1,38 @@
+<section>
+    <div class="page-header">
+        <h1>
+            <span>{{vm.spec.title}} Specification</span>
+            <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
+                <a class="btn btn-danger" data-ng-click="vm.remove()">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+            </div>
+        </h1>
+    </div>
+    <uib-tabset active="activeTab">
+        <uib-tab index="0" heading="Swagger">
+            <div class="pull-right" data-ng-show="vm.spec.isCurrentUserOwner">
+                <a class="btn btn-primary" data-ui-sref="specs.edit({ specId: vm.spec._id })">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+                <button class="btn btn-primary" type="button" ng-click="vm.testSwagger()">
+                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div swagger-ui input-type="url" input="swaggerUrl" trusted-sources="true" validator-url="false" api-explorer="true" parser="json"></div>
+        </uib-tab>
+        <uib-tab index="1" heading="Dredd">
+            <h3>Dredd</h3>
+        </uib-tab>
+    </uib-tabset>
+    <script type="text/ng-template" id="modal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title" data-ng-bind="modalHeader"></h3>
+        </div>
+        <div class="modal-body" id="modal-body" data-ng-bind="modalText">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="vm.closeModal()">Close</button>
+        </div>
+    </script>
+</section>
