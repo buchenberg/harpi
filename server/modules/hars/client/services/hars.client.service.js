@@ -19,9 +19,14 @@
         method: 'POST',
         url: 'api/hars/:harId/specs'
       },
+      mermaidify: {
+        method: 'POST',
+        url: 'api/hars/:harId/mermaid'
+      },
+      // Legacy alias - deprecated
       plantify: {
         method: 'POST',
-        url: 'api/hars/:harId/puml'
+        url: 'api/hars/:harId/mermaid'
       }
     });
   }

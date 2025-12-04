@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Button, Row, Col, Badge, Alert, Modal, Form } from 'react-bootstrap'
+import { Card, Button, Row, Col, Badge, Alert, Modal, Form, Table } from 'react-bootstrap'
 import axios from 'axios'
 
 function Projects() {

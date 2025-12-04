@@ -135,12 +135,12 @@
 								metadata extention can be added to the entry.</dd>
 						</dl>
 
-						<div ng-if="vm.har.mermaid || vm.har.puml" class="mermaid-diagram-container" style="margin-top: 20px;">
-							<pre class="mermaid" id="mermaid-diagram-{{vm.har._id}}">{{vm.har.mermaid || ''}}</pre>
-						</div>
-						<div ng-if="!vm.har.mermaid && !vm.har.puml" class="alert alert-info">
-							<p>No diagram generated yet. Click "Generate" to create a sequence diagram from this HAR file.</p>
-						</div>
+					<div ng-if="vm.har.mermaid" class="mermaid-diagram-container" style="margin-top: 20px;">
+						<pre class="mermaid" id="mermaid-diagram-{{vm.har._id}}">{{vm.har.mermaid}}</pre>
+					</div>
+					<div ng-if="!vm.har.mermaid" class="alert alert-info">
+						<p>No diagram generated yet. Click "Generate" to create a sequence diagram from this HAR file.</p>
+					</div>
 					</div>
 				</p>
 			</uib-tab>

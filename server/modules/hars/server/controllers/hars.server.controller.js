@@ -292,13 +292,7 @@ exports.readUML = function (req, res) {
   var har = req.har;
   // Return Mermaid text for client-side rendering
   res.set('Content-Type', 'text/plain');
-  // Support both mermaid (new) and puml (legacy) for backward compatibility
-  var mermaidText = har.mermaid || '';
-  if (!mermaidText && har.puml) {
-    // If only old PlantUML exists, return empty (user needs to regenerate)
-    mermaidText = '';
-  }
-  res.send(mermaidText);
+  res.send(har.mermaid || '');
 };
 
 exports.createUML = async function (req, res) {

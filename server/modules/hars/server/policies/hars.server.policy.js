@@ -30,13 +30,19 @@ exports.invokeRolesPolicies = function () {
                     resources: '/api/hars/:harId',
                     permissions: ['get', 'patch']
                 }, {
-                    resources: '/api/hars/:harId/puml',
+                    resources: '/api/hars/:harId/mermaid',
+                    permissions: ['get', 'post']
+                }, {
+                    resources: '/api/hars/:harId/puml',  // Legacy alias
                     permissions: ['get', 'post']
                 }, {
                     resources: '/api/hars/:harId/specs',
                     permissions: ['post']
+                }, {
+                    resources: '/api/hars/:harId/diagrams',
+                    permissions: ['get', 'post']
                 }]
-        },         {
+        }, {
             roles: ['guest'],
             allows: [{
                 resources: '/api/hars',
@@ -45,7 +51,10 @@ exports.invokeRolesPolicies = function () {
                     resources: '/api/hars/:harId',
                     permissions: ['get', 'delete']
                 }, {
-                    resources: '/api/hars/:harId/puml',
+                    resources: '/api/hars/:harId/mermaid',
+                    permissions: ['get', 'post']
+                }, {
+                    resources: '/api/hars/:harId/puml',  // Legacy alias
                     permissions: ['get']
                 }, {
                     resources: '/api/hars/:harId/specs',

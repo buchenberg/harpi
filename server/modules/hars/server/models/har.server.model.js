@@ -22,9 +22,6 @@ var HarSchema = new Schema({
     default: Date.now
   },
   log: {},
-  puml: {
-    type: String
-  },
   mermaid: {
     type: String
   },

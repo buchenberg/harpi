@@ -144,7 +144,7 @@ module.exports = function (app) {
 
   /**
    * @swagger
-   * /api/hars/{harId}/puml:
+   * /api/hars/{harId}/mermaid:
    *   get:
    *     tags: [HARs]
    *     summary: Get Mermaid diagram text for HAR file
@@ -178,6 +178,11 @@ module.exports = function (app) {
    *       200:
    *         description: Mermaid diagram generated successfully
    */
+  app.route('/api/hars/:harId/mermaid').all(harsPolicy.isAllowed)
+        .get(hars.readUML)
+        .post(hars.createUML);
+  
+  // Legacy route alias for backward compatibility (deprecated)
   app.route('/api/hars/:harId/puml').all(harsPolicy.isAllowed)
         .get(hars.readUML)
         .post(hars.createUML);

@@ -1,11 +1,26 @@
-version: '2'
 services:
   web:
     image: buchenberg/harpi
-    links:
-      - db
     depends_on:
-      - db
-  db:
-    image: mongo
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://db:27017/harpi
+    restart: unless-stopped
 
+  db:
+    image: mongo:7.0
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped

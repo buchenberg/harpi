@@ -3,7 +3,7 @@
 ## Overview
 Create a new standalone library `har-to-mermaid` that converts HAR (HTTP Archive) files into Mermaid sequence diagrams. This will follow the same architectural pattern as `har-to-swagger`.
 
-## Architecture Decision
+## Architecture Decisions
 
 ### ✅ Separate Project Benefits
 1. **Separation of Concerns**: Each library has a single, focused responsibility
