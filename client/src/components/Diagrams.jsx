@@ -78,18 +78,26 @@ function Diagrams() {
     }
   }
 
-  // Render Mermaid diagram
+  // Render Mermaid diagram using Mermaid v10 API
   useEffect(() => {
     if (showViewModal && selectedDiagram && selectedDiagram.mermaid) {
       // Wait for modal to be fully rendered
-      setTimeout(() => {
+      setTimeout(async () => {
         if (window.mermaid && selectedDiagram) {
           const element = document.getElementById('mermaid-diagram-view')
           if (element) {
-            // Clear previous content
-            element.innerHTML = selectedDiagram.mermaid
-            // Re-initialize Mermaid for this element
-            window.mermaid.init(undefined, element)
+            try {
+              // Mermaid v10 API: use render() for dynamic content
+              const { svg } = await window.mermaid.render(
+                `mermaid-diagram-${Date.now()}`, 
+                selectedDiagram.mermaid
+              )
+              element.innerHTML = svg
+            } catch (err) {
+              console.error('Mermaid rendering error:', err)
+              // Fallback: display raw mermaid text
+              element.innerHTML = `<pre>${selectedDiagram.mermaid}</pre>`
+            }
           }
         }
       }, 100)
@@ -191,10 +199,17 @@ function Diagrams() {
         </Modal.Header>
         <Modal.Body style={{ padding: '20px', maxHeight: '70vh', overflow: 'auto' }}>
           {selectedDiagram && (
-            <div>
-              <pre id="mermaid-diagram-view" className="mermaid" style={{ margin: 0 }}>
-                {selectedDiagram.mermaid}
-              </pre>
+            <div 
+              id="mermaid-diagram-view" 
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                minHeight: '200px'
+              }}
+            >
+              {/* Mermaid diagram will be rendered here via useEffect */}
+              <span className="text-muted">Loading diagram...</span>
             </div>
           )}
         </Modal.Body>

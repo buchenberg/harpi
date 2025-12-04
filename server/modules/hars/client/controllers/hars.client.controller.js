@@ -173,34 +173,21 @@
             }
         }
 
-        // Render Mermaid diagram
+        // Render Mermaid diagram using Mermaid v10 API
         function renderMermaid() {
             if (typeof mermaid !== 'undefined' && vm.har.mermaid) {
                 var diagramElement = document.getElementById('mermaid-diagram-' + vm.har._id);
                 if (diagramElement && vm.har.mermaid) {
-                    try {
-                        // Check if already rendered (has SVG child)
-                        var existingSvg = diagramElement.querySelector('svg');
-                        if (existingSvg) {
-                            existingSvg.remove(); // Remove old rendering
-                        }
-                        
-                        // Set the Mermaid text
-                        diagramElement.textContent = vm.har.mermaid;
-                        
-                        // Trigger Mermaid to render (for dynamically added content)
-                        // Mermaid v10 will auto-render elements with class 'mermaid' when contentLoaded is called
-                        if (mermaid.contentLoaded) {
-                            mermaid.contentLoaded();
-                        } else if (mermaid.run) {
-                            // Alternative API for Mermaid v10
-                            mermaid.run({
-                                nodes: [diagramElement]
-                            });
-                        }
-                    } catch (err) {
-                        console.error('Error rendering Mermaid diagram:', err);
-                    }
+                    // Use Mermaid v10 render() API for dynamic content
+                    mermaid.render('mermaid-svg-' + vm.har._id + '-' + Date.now(), vm.har.mermaid)
+                        .then(function(result) {
+                            diagramElement.innerHTML = result.svg;
+                        })
+                        .catch(function(err) {
+                            console.error('Error rendering Mermaid diagram:', err);
+                            // Fallback: display raw mermaid text
+                            diagramElement.innerHTML = '<pre>' + vm.har.mermaid + '</pre>';
+                        });
                 }
             }
         }
