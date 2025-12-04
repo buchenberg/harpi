@@ -14,7 +14,7 @@ exports.renderIndex = function (req, res) {
   }
   
   // In production, serve the built Vite files
-  res.sendFile(path.resolve('../client/dist/index.html'));
+  res.sendFile(path.resolve('./client/dist/index.html'));
 };
 
 /**

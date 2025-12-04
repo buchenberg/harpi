@@ -165,7 +165,7 @@ module.exports.initModulesClientRoutes = function(app) {
   
   // Serve client build files in production
   if (process.env.NODE_ENV === 'production') {
-    app.use('/', express.static(path.resolve('../client/dist')));
+    app.use('/', express.static(path.resolve('./client/dist')));
   }
 
   // In development, Vite handles all client assets
