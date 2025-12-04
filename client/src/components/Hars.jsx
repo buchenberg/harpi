@@ -67,13 +67,7 @@ function Hars() {
     try {
       setError(null)
       setLoading(true)
-      const response = await axios.post(`/api/hars/${harId}/specs`)
-      
-      // Check if the endpoint is disabled (501 status)
-      if (response.status === 501) {
-        setError('Swagger generation is temporarily disabled')
-        return
-      }
+      await axios.post(`/api/hars/${harId}/specs`)
       
       setSuccessMessage('Spec generated successfully')
       setTimeout(() => setSuccessMessage(null), 3000)
@@ -81,6 +75,7 @@ function Hars() {
       navigate('/specs')
     } catch (err) {
       console.error('Error generating spec:', err)
+      // Axios throws for non-2xx status codes, so 501 is caught here
       if (err.response?.status === 501) {
         setError('Swagger generation is temporarily disabled due to dependency issues')
       } else {
